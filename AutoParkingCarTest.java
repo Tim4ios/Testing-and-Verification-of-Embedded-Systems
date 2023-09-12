@@ -1,13 +1,18 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Random;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 class AutoParkingCarTest {
     AutoParkingCar car;
-    int[] sens1 = new int[5];
-    int[] sens2 = new int[5];
+
+    Random random = new Random();
+    int randomNumber = random.nextInt(121)+80;
+    int[] sens1 = {180, 200, randomNumber, 200, 160};
+    int[] sens2 = {160, 200, randomNumber, 200, 180};
 
 
     @BeforeEach
@@ -17,11 +22,15 @@ class AutoParkingCarTest {
 
     @Test
     void didCarMoveForwardTest() {
-        car.con.setPosition(50000);
+        //car.con.setPosition(0);
+        car.MoveForward();
+        car.MoveForward();
+        car.MoveForward();
+        car.MoveForward();
+        car.MoveForward();
         car.MoveForward();
 
-        assertNull(car.MoveForward());
-        assertEquals(50000, car.con.getPosition());
+        assertEquals(600, car.con.getPosition());
         assertEquals(false, car.con.getSituation());
 
     }
@@ -44,10 +53,21 @@ class AutoParkingCarTest {
 
     @Test
     void parkCarTest() {
+        for (int i = 0; i < 50; i++) {
+            car.MoveForward();
+            car.Park();
+        }
+        int result = car.isEmpty();
+        System.out.println(result);
+        //car.MoveForward();
+
+        assertEquals(true, car.con.getSituation());
     }
 
     @Test
     void unParkTest() {
+        car.UnPark();
+        assertEquals(false, car.con.getSituation());
     }
 
     @Test
@@ -57,8 +77,8 @@ class AutoParkingCarTest {
         car.MoveForward();
 
 
-        assertEquals(300, car.con.getPosition());
-        assertEquals(false, car.con.getSituation());
+        assertEquals(300, car.WhereIs().getPosition());
+        assertEquals(false, car.WhereIs().getSituation());
 
     }
 }

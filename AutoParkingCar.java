@@ -1,15 +1,12 @@
-import java.util.ArrayList;
-
 public class AutoParkingCar {
     public context con;
     private int[] ultraSoundSensorOne;
     private int[] ultraSoundSensorTwo;
-    private int carPos;
-    public ArrayList<Integer> parkingList = new ArrayList<Integer>();
     private int oneMeter = 100;
+
+    private int carPos = 0;
     private int endOfTheStreet = 50000;
     private int startOfStreet = 0;
-    private boolean isParked;
 
     public static class context {
         private int position;
@@ -39,22 +36,18 @@ public class AutoParkingCar {
 
 
     public AutoParkingCar(int[] sens1, int[] sens2, context con) {
-        //Car startValues
         this.con = con;
         con.position = 0;
         con.situation = false;
         ultraSoundSensorOne = sens1;
         ultraSoundSensorTwo = sens2;
-        for (int i = 0; i < 50; i++) {
-            parkingList.add(1);
-            parkingList.add(0);
-        }
 
     }
 
     public context MoveForward() {
         if (con.position >= endOfTheStreet) {
-            System.out.println("Car went to far");
+            //start over from start?
+            con.position = startOfStreet;
             return null;
         } else {
             con.position = con.position + oneMeter;
@@ -101,20 +94,17 @@ public class AutoParkingCar {
 
         if (isNoisy(fiveSensValuesOne)) {
             if (isNoisy(fiveSensValuesTwo)) {
-                System.out.println("Both sensors are unreliable");
                 return -1;
             } else {
                 for (int value : fiveSensValuesTwo) {
                     distance += value;
                 }
-                System.out.println("First sensor noisy");
                 return distance / 5; //average
             }
         } else if (isNoisy(fiveSensValuesTwo)) {
             for (int value : fiveSensValuesOne) {
                 distance += value;
             }
-            System.out.println("Second sensor noisy");
             return distance / 5; //average
         } else {
             // Both sensors are reliable, handle this case accordingly
@@ -124,16 +114,23 @@ public class AutoParkingCar {
             for (int value : fiveSensValuesTwo) {
                 distance += value;
             }
-            System.out.println("Both sensors are reliable");
             return distance / 10; // average of 10 values (5 from each sensor)
         }
     }
 
-    void Park() {
 
+    public context Park() {
+        if (isEmpty() > 180) {
+            con.situation = true;
+            System.out.println("You parked your car");
+        }
+        return con;
     }
 
-    void UnPark() {
+    public context UnPark() {
+        con.situation = false;
+        return con;
+
     }
 
     public context WhereIs() {
