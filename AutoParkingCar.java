@@ -4,6 +4,7 @@ import java.util.Random;
 public class AutoParkingCar {
     private double[] ultraSoundSensorOne;
     private double[] ultraSoundSensorTwo;
+    private double carPos;
 
     public AutoParkingCar(double[] sens1, double[] sens2) {
         //Car startValues
@@ -13,28 +14,39 @@ public class AutoParkingCar {
         ultraSoundSensorTwo = sens2;
     }
 
-    void MoveForward(){}
+    void MoveForward() {
+        double oneMeter = 100;
+        carPos = carPos + oneMeter;
+        isEmpty();
 
-    void MoveBackwards(){}
 
-    double isEmpty(){
+    }
+
+    void MoveBackwards() {
+
+    }
+
+    double isEmpty() {
         double Au;
-        isNoisy(car)
+        isNoisy(car);
 
-        
+
         return distance;
 
     }
 
-    boolean isNoisy(double[] sensorData){
+    boolean isNoisy(double[] sensorData) {
 
     }
 
-    void Park(){}
+    void Park() {
+    }
 
-    void UnPark(){}
+    void UnPark() {
+    }
 
-    void WhereIs(){}
+    void WhereIs() {
+    }
 
     class ParkingData {
         private int position;
@@ -53,7 +65,6 @@ public class AutoParkingCar {
             return situation;
         }
     }
-
 
 
 }
