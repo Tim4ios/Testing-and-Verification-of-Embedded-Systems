@@ -1,10 +1,7 @@
-import java.util.Arrays;
-import java.util.Random;
-
 public class AutoParkingCar {
     private double[] ultraSoundSensorOne;
     private double[] ultraSoundSensorTwo;
-    private double carPos;
+    private int carPos;
     private boolean isParked;
 
     public AutoParkingCar(double[] sens1, double[] sens2) {
@@ -16,7 +13,7 @@ public class AutoParkingCar {
     }
 
     void MoveForward() {
-        double oneMeter = 100;
+        int oneMeter = 100;
         carPos = carPos + oneMeter;
         isEmpty();
 
@@ -46,14 +43,15 @@ public class AutoParkingCar {
     void UnPark() {
     }
 
-    void WhereIs() {
+    ParkingData WhereIs() {
+        return new ParkingData(carPos, isParked);
     }
 
     class ParkingData {
         private int position;
-        private String situation;
+        private boolean situation;
 
-        public ParkingData(int position, String situation) {
+        public ParkingData(int position, boolean situation) {
             this.position = position;
             this.situation = situation;
         }
@@ -62,7 +60,7 @@ public class AutoParkingCar {
             return position;
         }
 
-        public String getSituation() {
+        public boolean getSituation() {
             return situation;
         }
     }
