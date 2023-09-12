@@ -5,7 +5,7 @@ public class AutoParkingCar {
     private int[] ultraSoundSensorOne;
     private int[] ultraSoundSensorTwo;
     private int carPos;
-    private ArrayList<context> contextList = new ArrayList<context>();
+    public ArrayList<Integer> parkingList = new ArrayList<Integer>();
     private int oneMeter = 100;
     private int endOfTheStreet = 50000;
     private int startOfStreet = 0;
@@ -45,6 +45,11 @@ public class AutoParkingCar {
         con.situation = false;
         ultraSoundSensorOne = sens1;
         ultraSoundSensorTwo = sens2;
+        for (int i = 0; i < 50; i++) {
+            parkingList.add(1);
+            parkingList.add(0);
+        }
+
     }
 
     public context MoveForward() {
@@ -125,6 +130,7 @@ public class AutoParkingCar {
     }
 
     void Park() {
+
     }
 
     void UnPark() {
