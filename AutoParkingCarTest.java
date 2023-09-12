@@ -3,21 +3,19 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class AutoParkingCarTest {
     AutoParkingCar car;
-
-    Random random = new Random();
-    int randomNumber = random.nextInt(121)+80;
-    int[] sens1 = {180, 200, randomNumber, 200, 160};
-    int[] sens2 = {160, 200, randomNumber, 200, 180};
-
+    private int[] dummySens1;
+    private int[] dummySens2;
 
     @BeforeEach
     void setupCar() {
-        car = new AutoParkingCar(sens1, sens2, new AutoParkingCar.context(0, false));
+        dummySens1 = new int[]{100, 110, 105, 108, 115};
+        dummySens2 = new int[]{95, 105, 98, 112, 100};
+        AutoParkingCar.context dummyContext = new AutoParkingCar.context(0, false);
+        car = new AutoParkingCar(dummySens1, dummySens2, dummyContext);
     }
 
     @Test
@@ -46,10 +44,6 @@ class AutoParkingCarTest {
 
     }
 
-    @Test
-    void isSensorEmptyTest() {
-
-    }
 
     @Test
     void parkCarTest() {
@@ -80,5 +74,34 @@ class AutoParkingCarTest {
         assertEquals(300, car.WhereIs().getPosition());
         assertEquals(false, car.WhereIs().getSituation());
 
+    }
+
+
+    @Test
+    void testIsNoisy() {
+        int[] noisyData = {20, 150, 10, 200, 115};
+        assertTrue(car.isNoisy(noisyData)); // Noisy data should return true
+    }
+
+    @Test
+    void testIsNotNoisy() {
+        int[] cleanData = {190, 150, 120, 180, 200};
+        assertFalse(car.isNoisy(cleanData));// Clean data should return false
+    }
+
+
+    @Test
+    void testIsEmpty() {
+        int result = car.isEmpty();
+        int expected_result = 0;
+
+        for (int val : dummySens1) {
+            expected_result += val;
+        }
+        for (int val : dummySens2) {
+            expected_result += val;
+        }
+
+        assertEquals(expected_result / 10, result);
     }
 }
