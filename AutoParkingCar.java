@@ -36,5 +36,24 @@ public class AutoParkingCar {
 
     void WhereIs(){}
 
+    class ParkingData {
+        private int position;
+        private String situation;
+
+        public ParkingData(int position, String situation) {
+            this.position = position;
+            this.situation = situation;
+        }
+
+        public int getPosition() {
+            return position;
+        }
+
+        public String getSituation() {
+            return situation;
+        }
+    }
+
+
 
 }
