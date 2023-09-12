@@ -1,7 +1,14 @@
+import java.util.Arrays;
+import java.util.Random;
+
 public class AutoParkingCar {
     private double[] ultraSoundSensorOne;
     private double[] ultraSoundSensorTwo;
     private int carPos;
+
+    private int oneMeter = 100;
+
+    private int endOfTheStreet = 50000;
     private boolean isParked;
 
     public AutoParkingCar(double[] sens1, double[] sens2) {
@@ -13,10 +20,10 @@ public class AutoParkingCar {
     }
 
     void MoveForward() {
-        int oneMeter = 100;
         carPos = carPos + oneMeter;
         isEmpty();
-
+        if(carPos >= endOfTheStreet)
+            System.out.println("Car went to far");
 
     }
 
@@ -43,15 +50,14 @@ public class AutoParkingCar {
     void UnPark() {
     }
 
-    ParkingData WhereIs() {
-        return new ParkingData(carPos, isParked);
+    void WhereIs() {
     }
 
     class ParkingData {
         private int position;
-        private boolean situation;
+        private String situation;
 
-        public ParkingData(int position, boolean situation) {
+        public ParkingData(int position, String situation) {
             this.position = position;
             this.situation = situation;
         }
@@ -60,7 +66,7 @@ public class AutoParkingCar {
             return position;
         }
 
-        public boolean getSituation() {
+        public String getSituation() {
             return situation;
         }
     }
