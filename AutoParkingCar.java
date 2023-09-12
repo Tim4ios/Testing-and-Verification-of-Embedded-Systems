@@ -5,11 +5,12 @@ public class AutoParkingCar {
     private double[] ultraSoundSensorOne;
     private double[] ultraSoundSensorTwo;
     private double carPos;
+    private boolean isParked;
 
     public AutoParkingCar(double[] sens1, double[] sens2) {
         //Car startValues
-        double carPos = 0;
-        boolean isParked = false;
+        carPos = 0;
+        isParked = false;
         ultraSoundSensorOne = sens1;
         ultraSoundSensorTwo = sens2;
     }
