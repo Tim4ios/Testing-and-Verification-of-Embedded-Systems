@@ -103,7 +103,7 @@ public class AutoParkingCar {
 
     /**
      Description:
-     isNoisy: This method takes in an array of integers and creates a 5 long array based on the cars position if any
+     isNoisy: This method takes in an array of integers and creates a 5 long array based on the cars position, if any
      value in the array exceeds 200 or is below 0 returns true. We then iterate through the array and find the smallest
      and biggest values and if the difference is bigger than 120 then return true. Otherwise, return false
 
