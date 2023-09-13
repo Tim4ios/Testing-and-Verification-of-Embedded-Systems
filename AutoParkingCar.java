@@ -45,7 +45,6 @@ public class AutoParkingCar {
     }
 
     /**
-
      Description:
      MoveForward: : This method moves the car 1 meter forward, queries the two sensors through the isEmpty method
      described below and returns a data structure that contains the current position of the car, and the situation
@@ -126,9 +125,6 @@ public class AutoParkingCar {
         int min = sensorData[0];
 
 
-
-        int countOfOutliars = 0;
-
         for (int i = 1; i < sensorData.length; i++) {
 
             if(sensorData[i]<0||sensorData[i]>200) return true;
@@ -188,7 +184,7 @@ public class AutoParkingCar {
                     distance += value;
                 }
                 System.out.println(distance);
-                return distance / 5; //average of the 5 values
+                return distance / fiveSensValuesTwo.length; //average of the 5 values
             }
 
         }
@@ -198,7 +194,7 @@ public class AutoParkingCar {
             for (int value : fiveSensValuesOne) {
                 distance += value;
             }
-            return distance / 5; //average of the 5 values
+            return distance / fiveSensValuesOne.length; //average of the 5 values
         }
 
 
@@ -209,7 +205,7 @@ public class AutoParkingCar {
         for (int value : fiveSensValuesTwo) {
             distance += value;
         }
-        return distance / 10; // average of 10 values (5 from each sensor)
+        return distance / (fiveSensValuesOne.length+fiveSensValuesTwo.length); // average of 10 values (5 from each sensor)
 
     }
 
