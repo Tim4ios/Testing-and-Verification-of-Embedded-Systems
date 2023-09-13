@@ -10,6 +10,7 @@ class AutoParkingCarTest {
     private int[] dummySens1;
     private int[] dummySens2;
 
+
     @BeforeEach
     void setupCar() {
         dummySens1 = new int[]{100, 110, 105, 108, 115};
@@ -54,7 +55,7 @@ class AutoParkingCarTest {
         int result = car.isEmpty();
         System.out.println(result);
         //car.MoveForward();
-
+        //MAN KAN INTE PARKERA OM INTE SENSORERNA SÄGER ATT DET FINNS EN PLATS, HALLÅ
         assertEquals(true, car.con.getSituation());
     }
 
@@ -76,23 +77,33 @@ class AutoParkingCarTest {
 
     }
 
-
     @Test
-    void testIsNoisy() {
+    void sensorDataNotNoisyTest() {
+        int[] cleanData = {190, 150, 120, 180, 200};
+        assertFalse(car.isNoisy(cleanData));// Clean data should return false
+    }
+    @Test
+    void sensorDataNoisyTest() {
         int[] noisyData = {20, 150, 10, 200, 115};
         assertTrue(car.isNoisy(noisyData)); // Noisy data should return true
     }
 
     @Test
-    void testIsNotNoisy() {
-        int[] cleanData = {190, 150, 120, 180, 200};
-        assertFalse(car.isNoisy(cleanData));// Clean data should return false
+    void sensorDataNegativeTest() {
+        int[] cleanData = {0, 0, 0, 0, -1};
+        assertTrue(car.isNoisy(cleanData));// Noisy data should return true
+    }
+
+    @Test
+    void sensorDataTooBigTest() {
+        int[] cleanData = {200, 190, 201, 198, 189};
+        assertTrue(car.isNoisy(cleanData));// Noisy data should return true
     }
 
 
+
     @Test
-    void testIsEmpty() {
-        int result = car.isEmpty();
+    void isEmptyWithTwoWorkingSensorsTest() {
         int expected_result = 0;
 
         for (int val : dummySens1) {
@@ -101,7 +112,50 @@ class AutoParkingCarTest {
         for (int val : dummySens2) {
             expected_result += val;
         }
-
-        assertEquals(expected_result / 10, result);
+        //It the expected result should be the same as the average of the clean date
+        assertEquals(expected_result / 10, car.isEmpty());
     }
+
+    @Test
+    void isEmptyWithFirstSensorBrokenTest() {
+        int[] brokenSensor = {200,10,200,30,150};
+        AutoParkingCar dummyCar = new AutoParkingCar(dummySens1,brokenSensor,new AutoParkingCar.context(0,false));
+
+        int expected_result = 0;
+
+        for (int val : dummySens1) {
+            System.out.println(val);
+            expected_result += val;
+        }
+
+        //It the expected result should only take the average of the working sensor, being the second one
+        assertEquals(expected_result / 5, dummyCar.isEmpty());
+    }
+
+    @Test
+    void isEmptyWithSecondSensorBrokenTest() {
+        int[] brokenSensor = {200,10,50,100,150};
+        AutoParkingCar dummyCar = new AutoParkingCar(brokenSensor,dummySens2,new AutoParkingCar.context(0,false));
+
+        int expected_result = 0;
+
+        for (int val : dummySens2) {
+            System.out.println(val);
+            expected_result += val;
+        }
+
+        //It the expected result should only take the average of the working sensor, being the second one
+        assertEquals(expected_result / 5, dummyCar.isEmpty());
+    }
+
+    @Test
+    void isEmptyWithBothSensorsBrokenTest() {
+        int[] brokenSensorOne = {200,10,50,100,150};
+        int[] brokenSensorTwo = {500000,10,50,100,150};
+        AutoParkingCar dummyCar = new AutoParkingCar(brokenSensorOne,brokenSensorTwo,new AutoParkingCar.context(0,false));
+
+        //Faulty return value indicated with length -1
+        assertEquals(-1 , dummyCar.isEmpty());
+    }
+
 }

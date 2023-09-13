@@ -69,15 +69,30 @@ public class AutoParkingCar {
     }
 
     boolean isNoisy(int[] sensorData) {
+        //illegal startvalue
+        if(sensorData[0]>200||sensorData[0]<0) return true;
+
+        int max = sensorData[0];
+        int min = sensorData[0];
+
+
+
         int countOfOutliars = 0;
 
         for (int i = 1; i < sensorData.length; i++) {
-            if (120 < Math.abs(sensorData[i - 1] - sensorData[i])) {
-                countOfOutliars++;
-            }
-        }
 
-        return countOfOutliars > 1;
+            if(sensorData[i]<0||sensorData[i]>200) return true;
+
+            if(sensorData[i] > max){
+
+                max = sensorData[i];
+
+            }else if(sensorData[i] < min) min = sensorData[i];
+
+        }
+        //If the difference between the largest and smalles data exceeds 120 the data is noisy
+        return 120 < Math.abs(max - min);
+
     }
 
     int isEmpty() {
@@ -93,29 +108,41 @@ public class AutoParkingCar {
         }
 
         if (isNoisy(fiveSensValuesOne)) {
+            //First sensor is noisy
+
             if (isNoisy(fiveSensValuesTwo)) {
+                //Both sensors are noisy/broken
                 return -1;
             } else {
+
+                //Second sensor is working
                 for (int value : fiveSensValuesTwo) {
                     distance += value;
                 }
-                return distance / 5; //average
+                System.out.println(distance);
+                return distance / 5; //average of the 5 values
             }
-        } else if (isNoisy(fiveSensValuesTwo)) {
-            for (int value : fiveSensValuesOne) {
-                distance += value;
-            }
-            return distance / 5; //average
-        } else {
-            // Both sensors are reliable, handle this case accordingly
-            for (int value : fiveSensValuesOne) {
-                distance += value;
-            }
-            for (int value : fiveSensValuesTwo) {
-                distance += value;
-            }
-            return distance / 10; // average of 10 values (5 from each sensor)
+
         }
+
+        if (isNoisy(fiveSensValuesTwo)) {
+            //second sensor is noisy and first one is not
+            for (int value : fiveSensValuesOne) {
+                distance += value;
+            }
+            return distance / 5; //average of the 5 values
+        }
+
+
+        // Both sensors are reliable, handle this case accordingly
+        for (int value : fiveSensValuesOne) {
+            distance += value;
+        }
+        for (int value : fiveSensValuesTwo) {
+            distance += value;
+        }
+        return distance / 10; // average of 10 values (5 from each sensor)
+
     }
 
 
