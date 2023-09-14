@@ -55,7 +55,22 @@ public class AutoParkingCar {
         parkingPlace = parkP;
     }
 
-    //Descritption
+    /**
+     * Description:
+     * MoveForward: : This method moves the car 1 meter forward, queries the two sensors through the isEmpty method
+     * described below and returns a data structure that contains the current position of the car, and the situation
+     * of the detected parking places up to now. The car cannot be moved forward beyond the end of the street.
+     * <p>
+     * Pre-condition: Car is not at the end of the street
+     * <p>
+     * Post-condition: Car has moved 1 meter forward and has returned a data structure containing the current position of
+     * the car and the situation
+     * <p>
+     * Test-cases:
+     * MoveForwardFromStartTest
+     * MoveForwardFromEndOfStreet
+     * ...?
+     */
     public static int[] generateRandomParking(int length, int groupSize) {
         int[] array = new int[length];
         Random random = new Random();
