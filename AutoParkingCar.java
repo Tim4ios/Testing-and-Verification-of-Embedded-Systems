@@ -218,7 +218,6 @@ public class AutoParkingCar {
                 for (int value : fiveSensValuesTwo) {
                     distance += value;
                 }
-                System.out.println(distance);
                 return distance / fiveSensValuesTwo.length; //average of the 5 values
             }
 

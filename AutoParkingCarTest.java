@@ -7,8 +7,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AutoParkingCarTest {
     AutoParkingCar car;
-    //private int[] dummyNoSens1;
-    //private int[] dummyNoSens2;
+    AutoParkingCar car2;
+
+    private int[] dummyBrokenSens1;
+    private int[] dummyBrokenSens2;
     private int[] dummyParkingPlace;
 
     private int[] dummySens1;
@@ -20,14 +22,16 @@ class AutoParkingCarTest {
     void setupCars() {
         // Initialize dummy sensor data and car context for testing.
 
-        //dummyNoSens1 = new int[]{100, 110, 105, 108, 115};
-        //dummyNoSens2 = new int[]{95, 105, 98, 112, 100};
+        dummyBrokenSens1 = new int[]{200, 10, 200, 30, 150};
+        dummyBrokenSens2 = new int[]{200, 105, 72, 112, 100};
+
         dummySens1 = new int[]{200, 190, 180, 195, 185};
         dummySens2 = new int[]{180, 179, 193, 191, 199};
         dummyParkingPlace = AutoParkingCar.generateRandomParking(100, 5);
         AutoParkingCar.context dummyContext = new AutoParkingCar.context(0, false);
 
         car = new AutoParkingCar(dummySens1, dummySens2, dummyContext, dummyParkingPlace);
+        car2 = new AutoParkingCar(dummyBrokenSens1,dummyBrokenSens2,dummyContext,dummyParkingPlace);
 
 
     }
@@ -103,7 +107,18 @@ class AutoParkingCarTest {
     }
 
     @Test
-    void parkCarTest() {
+    void parkCarWithTwoBrokenSensorsTest()
+    {
+        System.out.println("This is the first array" + Arrays.toString(dummyParkingPlace));
+        car2.Park();
+        System.out.println("This is the parked array" + Arrays.toString(dummyParkingPlace));
+        System.out.println(car2.con.getPosition());
+        assertFalse(car2.con.getSituation());
+
+    }
+
+    @Test
+    void parkCarTwoWorkingSensorsTest() {
         // Test parking the car repeatedly while moving forward.
        /* for (int i = 0; i < 50; i++) {
             car.MoveForward();
@@ -166,16 +181,12 @@ class AutoParkingCarTest {
         assertTrue(car.isNoisy(cleanData));// Noisy data should return true
     }
 
-
     @Test
     void isEmptyWithTwoWorkingSensorsTest() {
         int expected_result = 0;
-        for (int val : dummySens1) {
-        }
-
 
         // Calculate the expected result based on dummy sensor data.
-        for (int val : dummySens2) {
+        for (int val : dummySens1) {
 
 
             expected_result += val;
@@ -187,7 +198,6 @@ class AutoParkingCarTest {
         assertEquals(expected_result / 10, car.isEmpty());
     }
 
-
     @Test
     void isEmptyWithFirstSensorBrokenTest() {
         int[] brokenSensor = {200, 10, 200, 30, 150};
@@ -196,7 +206,6 @@ class AutoParkingCarTest {
         int expected_result = 0;
 
         for (int val : dummySens1) {
-            System.out.println(val);
             expected_result += val;
         }
 
@@ -212,7 +221,6 @@ class AutoParkingCarTest {
         int expected_result = 0;
 
         for (int val : dummySens2) {
-            System.out.println(val);
             expected_result += val;
         }
 
