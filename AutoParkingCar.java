@@ -97,6 +97,8 @@ public class AutoParkingCar {
      * ...?
      */
     public context MoveForward() {
+        if (con.situation)
+            return con;
         if (con.position >= endOfTheStreet) {
             counter = 0;
             con.position = startOfStreet;
@@ -133,6 +135,8 @@ public class AutoParkingCar {
      * ...?
      */
     public context MoveBackwards() {
+        if (con.situation)
+            return con;
 
         con.position = con.position - oneMeter;
 
@@ -270,6 +274,10 @@ public class AutoParkingCar {
      * ...?
      */
     public context Park() {
+        //If we already are parked, do nothing
+        if (con.situation)
+            return con;
+
         while (parkingPlace[counter] != 0)
             MoveForward();
         if (parkingPlace[counter] == 0 && parkingPlace[counter + 1] == 0 && parkingPlace[counter + 2] == 0 &&
@@ -302,6 +310,10 @@ public class AutoParkingCar {
      * ...?
      */
     public context UnPark() {
+        //If we already are unParked, do nothing
+        if (!con.situation)
+            return con;
+
         con.situation = false;
         int tempCount = counter;
         for (int i = 0; i <= 5 && tempCount < parkingPlace.length; i++) {
