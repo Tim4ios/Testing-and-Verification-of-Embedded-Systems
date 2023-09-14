@@ -31,6 +31,27 @@ class AutoParkingCarTest {
 
     }
 
+
+
+
+/**------------------------------------------------------------------------------------------------------------------**/
+    /**TESTS FOR WhereIs() METHOD**/
+    @Test
+    void whereIsCarTest() {
+        // Test whether the WhereIs method returns car position and situation correctly.
+        int pos3 = 300;
+        for (int i = 0; i < 3; i++) {
+            car.MoveForward();
+        }
+
+        // Assert that the position and situation match the expected values.
+        assertEquals(pos3, car.WhereIs().getPosition());
+        assertFalse(car.WhereIs().getSituation());
+
+    }
+
+/**------------------------------------------------------------------------------------------------------------------**/
+    /**TESTS FOR MoveForwards() METHOD**/
     @Test
     void didCarMoveForwardTest() {
         // Test whether the car can move forward correctly.
@@ -43,6 +64,13 @@ class AutoParkingCarTest {
         assertFalse(car.con.getSituation());
 
 
+    }
+    @Test
+    void tryToMoveForwardParkTest() {
+        car.Park();
+        int resultPosition = car.con.getPosition();
+        car.MoveForward();
+        assertEquals(resultPosition, car.con.getPosition());
     }
 
     @Test
@@ -58,14 +86,8 @@ class AutoParkingCarTest {
         // Assert that the car's position is now at the beginning of the street (startOver).
         assertEquals(0, car.con.getPosition());
     }
-
-    @Test
-    void shouldNotMoveBackwardsIfAtStartTest() {
-        // Test so the car can't move out of the street backwards
-        car.MoveBackwards();
-        assertEquals(0, car.con.getPosition());
-    }
-
+/**------------------------------------------------------------------------------------------------------------------**/
+/**TESTS FOR MoveBackwards() METHOD**/
     @Test
     void didCarMoveBackwardsTest() {
         // Test whether the car can move backward correctly.
@@ -82,9 +104,8 @@ class AutoParkingCarTest {
 
 
     }
-
     @Test
-    void tryToMoveBackwardsParkTest() {
+    void tryToMoveBackwardsWhileParkedTest() {
         car.Park();
         int resultPosition = car.con.getPosition();
         car.MoveBackwards();
@@ -92,22 +113,29 @@ class AutoParkingCarTest {
     }
 
     @Test
-    void tryToMoveForwardParkTest() {
-        car.Park();
-        int resultPosition = car.con.getPosition();
-        car.MoveForward();
-        assertEquals(resultPosition, car.con.getPosition());
+    void shouldNotMoveBackwardsIfAtStartTest() {
+        // Test so the car can't move out of the street backwards
+        car.MoveBackwards();
+        assertEquals(0, car.con.getPosition());
     }
 
+/**------------------------------------------------------------------------------------------------------------------**/
+/**TESTS FOR Park() METHOD**/
     @Test
-    void unParkFirstParkingSpotTest() {
-        // Test if the car can be unparked.
-        car2.Park();
-        int resultPosition = car.con.getPosition();
-        car2.UnPark();
-        // Assert that the car is not parked.
-        assertEquals(resultPosition, car.con.getPosition());
+    void parkCarTest() {
+        //unpark car in case it is parked
+        car.UnPark();
+        car.Park();
+        assertTrue(car.con.getSituation());
     }
+    @Test
+    void parkCarWhenParkedTest() {
+        car.con.setSituation(true);
+        car.Park();
+        assertTrue(car.con.getSituation());
+    }
+/**------------------------------------------------------------------------------------------------------------------**/
+    /**TESTS FOR UnPark() METHOD**/
     @Test
     void unParkTest() {
         // Test if the car can be unparked.
@@ -120,28 +148,6 @@ class AutoParkingCarTest {
         // Assert that the car is not parked.
         assertEquals(resultPosition, car.con.getPosition());
     }
-
-    @Test
-    void whereIsCarTest() {
-        // Test whether the WhereIs method returns car position and situation correctly.
-        int pos3 = 300;
-        for (int i = 0; i < 3; i++) {
-            car.MoveForward();
-        }
-
-        // Assert that the position and situation match the expected values.
-        assertEquals(pos3, car.WhereIs().getPosition());
-        assertFalse(car.WhereIs().getSituation());
-
-    }
-
-    @Test
-    void parkCarWhenParkedTest() {
-        car.con.setSituation(true);
-        car.Park();
-        assertTrue(car.con.getSituation());
-    }
-
     @Test
     void unParkCarWhenParkedTest() {
         car.con.setSituation(false);
@@ -149,7 +155,8 @@ class AutoParkingCarTest {
         assertFalse(car.con.getSituation());
 
     }
-
+/**------------------------------------------------------------------------------------------------------------------**/
+    /**TESTS FOR setPosition() & getPosition() METHOD**/
     @Test
     void InvalidInputArgumentNegativePositionTest() {
         car.con.setPosition(-300);
@@ -162,6 +169,8 @@ class AutoParkingCarTest {
         assertEquals(0, car.WhereIs().getPosition());
     }
 
+/**------------------------------------------------------------------------------------------------------------------**/
+    /**TESTS FOR isNoisy() METHOD**/
     @Test
     void sensorDataNotNoisyTest() {
         int[] cleanData = {190, 150, 120, 180, 200};
@@ -186,6 +195,8 @@ class AutoParkingCarTest {
         assertTrue(car.isNoisy(cleanData));// Noisy data should return true
     }
 
+/**------------------------------------------------------------------------------------------------------------------**/
+    /**TESTS FOR isEmpty() METHOD**/
     @Test
     void isEmptyWithTwoWorkingSensorsTest() {
         int expected_result = 0;

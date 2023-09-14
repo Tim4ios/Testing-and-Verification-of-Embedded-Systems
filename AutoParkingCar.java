@@ -32,9 +32,6 @@ public class AutoParkingCar {
             this.position = position;
         }
 
-        public void setSituation(boolean situation) {
-            this.situation = situation;
-        }
 
         public int getPosition() {
             return position;
@@ -42,6 +39,10 @@ public class AutoParkingCar {
 
         public boolean getSituation() {
             return situation;
+        }
+
+        public void setSituation(boolean situation) {
+            this.situation = situation;
         }
     }
 
@@ -301,6 +302,7 @@ public class AutoParkingCar {
     }
 
     /**
+     *
      * Description:
      * UnPark: It moves the car forward (and to left) to front of the parking place, if it is parked.
      * <p>
@@ -324,8 +326,7 @@ public class AutoParkingCar {
         for (int i = 0; i <= 5 && tempCount < parkingPlace.length; i++) {
             parkingPlace[tempCount] = 0;
             tempCount--;
-            if (tempCount < 0)
-                tempCount = 0;
+
         }
         return con;
 
