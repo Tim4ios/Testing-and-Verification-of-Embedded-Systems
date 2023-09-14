@@ -6,10 +6,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class AutoParkingCarTest {
     AutoParkingCar car;
     AutoParkingCar car2;
-
-    private int[] dummyBrokenSens1;
-    private int[] dummyBrokenSens2;
     private int[] dummyParkingPlace;
+    private int[] dummyParkingFirstSpot;
 
     private int[] dummySens1;
     private int[] dummySens2;
@@ -20,16 +18,15 @@ class AutoParkingCarTest {
     void setupCars() {
         // Initialize dummy sensor data and car context for testing.
 
-        dummyBrokenSens1 = new int[]{200, 10, 200, 30, 150};
-        dummyBrokenSens2 = new int[]{200, 105, 72, 112, 100};
-
         dummySens1 = new int[]{200, 190, 180, 195, 185};
         dummySens2 = new int[]{180, 179, 193, 191, 199};
+        dummyParkingFirstSpot = new int[] {0,0,0,0,0};
+
         dummyParkingPlace = AutoParkingCar.generateRandomParking(500, 5);
         AutoParkingCar.context dummyContext = new AutoParkingCar.context(0, false);
 
         car = new AutoParkingCar(dummySens1, dummySens2, dummyContext, dummyParkingPlace);
-        car2 = new AutoParkingCar(dummyBrokenSens1, dummyBrokenSens2, dummyContext, dummyParkingPlace);
+        car2 = new AutoParkingCar(dummySens1, dummySens2, dummyContext, dummyParkingFirstSpot);
 
 
     }
@@ -91,16 +88,26 @@ class AutoParkingCarTest {
         car.Park();
         int resultPosition = car.con.getPosition();
         car.MoveBackwards();
-        assertEquals(resultPosition,car.con.getPosition());
+        assertEquals(resultPosition, car.con.getPosition());
     }
+
     @Test
     void tryToMoveForwardParkTest() {
         car.Park();
         int resultPosition = car.con.getPosition();
         car.MoveForward();
-        assertEquals(resultPosition,car.con.getPosition());
+        assertEquals(resultPosition, car.con.getPosition());
     }
 
+    @Test
+    void unParkFirstParkingSpotTest() {
+        // Test if the car can be unparked.
+        car2.Park();
+        int resultPosition = car.con.getPosition();
+        car2.UnPark();
+        // Assert that the car is not parked.
+        assertEquals(resultPosition, car.con.getPosition());
+    }
     @Test
     void unParkTest() {
         // Test if the car can be unparked.
@@ -111,7 +118,7 @@ class AutoParkingCarTest {
         int resultPosition = car.con.getPosition();
         car.UnPark();
         // Assert that the car is not parked.
-        assertEquals(resultPosition,car.con.getPosition());
+        assertEquals(resultPosition, car.con.getPosition());
     }
 
     @Test
@@ -129,22 +136,19 @@ class AutoParkingCarTest {
     }
 
     @Test
-    void parkCarWhenParkedTest()
-    {
+    void parkCarWhenParkedTest() {
         car.con.setSituation(true);
         car.Park();
         assertTrue(car.con.getSituation());
     }
 
     @Test
-    void unParkCarWhenParkedTest()
-    {
+    void unParkCarWhenParkedTest() {
         car.con.setSituation(false);
         car.UnPark();
         assertFalse(car.con.getSituation());
 
     }
-
 
     @Test
     void InvalidInputArgumentNegativePositionTest() {
