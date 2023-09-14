@@ -1,8 +1,6 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class AutoParkingCarTest {
@@ -89,17 +87,31 @@ class AutoParkingCarTest {
     }
 
     @Test
-    void parkTest() {
+    void tryToMoveBackwardsParkTest() {
         car.Park();
-        assertTrue(car.con.getSituation());
+        int resultPosition = car.con.getPosition();
+        car.MoveBackwards();
+        assertEquals(resultPosition,car.con.getPosition());
+    }
+    @Test
+    void tryToMoveForwardParkTest() {
+        car.Park();
+        int resultPosition = car.con.getPosition();
+        car.MoveForward();
+        assertEquals(resultPosition,car.con.getPosition());
     }
 
     @Test
     void unParkTest() {
         // Test if the car can be unparked.
+        car.MoveForward();
+        car.MoveForward();
+        car.MoveForward();
+        car.Park();
+        int resultPosition = car.con.getPosition();
         car.UnPark();
         // Assert that the car is not parked.
-        assertFalse(car.con.getSituation());
+        assertEquals(resultPosition,car.con.getPosition());
     }
 
     @Test
@@ -115,6 +127,24 @@ class AutoParkingCarTest {
         assertFalse(car.WhereIs().getSituation());
 
     }
+
+    @Test
+    void parkCarWhenParkedTest()
+    {
+        car.con.setSituation(true);
+        car.Park();
+        assertTrue(car.con.getSituation());
+    }
+
+    @Test
+    void unParkCarWhenParkedTest()
+    {
+        car.con.setSituation(false);
+        car.UnPark();
+        assertFalse(car.con.getSituation());
+
+    }
+
 
     @Test
     void InvalidInputArgumentNegativePositionTest() {
