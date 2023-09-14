@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.Random;
 
 public class AutoParkingCar {
@@ -7,10 +6,13 @@ public class AutoParkingCar {
     private int[] ultraSoundSensorTwo;
     private int oneMeter = 100;
 
+    private int parkingCounter = 0;
     private boolean parkingSpot = false;
 
     public int counter = 0;
     private int[] parkingPlace;
+
+    private int[] parkingSpots;
     private int carPos = 0;
     private int endOfTheStreet = 50000;
     private int startOfStreet = 0;
@@ -25,6 +27,8 @@ public class AutoParkingCar {
         }
 
         public void setPosition(int position) {
+            if (position < 0 || position > 50000)
+                position = 0;
             this.position = position;
         }
 
@@ -51,6 +55,7 @@ public class AutoParkingCar {
         parkingPlace = parkP;
     }
 
+    //Descritption
     public static int[] generateRandomParking(int length, int groupSize) {
         int[] array = new int[length];
         Random random = new Random();
@@ -93,20 +98,24 @@ public class AutoParkingCar {
      */
     public context MoveForward() {
         if (con.position >= endOfTheStreet) {
-            //start over from start?
             counter = 0;
             con.position = startOfStreet;
-            return null;
         } else {
             con.position = con.position + oneMeter;
             counter++;
-            isEmpty();
+            //For actual implementation of a real parking-place.
+            /*if (isEmpty() > 180);
+                parkingSpots[counter] = 0;
+            parkingSpots[counter] = 1;*/
+            if (isEmpty() > 180)
+                parkingCounter++;
+
+
         }
 
 
         return con;
     }
-
 
     /**
      * Description:
@@ -267,7 +276,6 @@ public class AutoParkingCar {
                 parkingPlace[counter + 3] == 0 && parkingPlace[counter + 4] == 0) {
             parkingSpot = true;
         }
-
 
         if (isEmpty() > 180 && parkingSpot) {
             con.situation = true;

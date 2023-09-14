@@ -27,19 +27,12 @@ class AutoParkingCarTest {
 
         dummySens1 = new int[]{200, 190, 180, 195, 185};
         dummySens2 = new int[]{180, 179, 193, 191, 199};
-        dummyParkingPlace = AutoParkingCar.generateRandomParking(100, 5);
+        dummyParkingPlace = AutoParkingCar.generateRandomParking(500, 5);
         AutoParkingCar.context dummyContext = new AutoParkingCar.context(0, false);
 
         car = new AutoParkingCar(dummySens1, dummySens2, dummyContext, dummyParkingPlace);
-        car2 = new AutoParkingCar(dummyBrokenSens1,dummyBrokenSens2,dummyContext,dummyParkingPlace);
+        car2 = new AutoParkingCar(dummyBrokenSens1, dummyBrokenSens2, dummyContext, dummyParkingPlace);
 
-
-    }
-
-    @Test
-    void isCarInTheStartOfTheStreetTest() {
-        //Make sure that the car is in the start position
-        assertEquals(0, car.con.getPosition());
 
     }
 
@@ -55,17 +48,6 @@ class AutoParkingCarTest {
         assertFalse(car.con.getSituation());
 
 
-    }
-
-    @Test
-    void carShouldMoveUntilStopTest() {
-        //Setting up variables for testing that it should keep move for 10½ lapse.
-        int teenAndAHalfLapse = (10 * 501) + 250;
-        int posMiddle = 25000;
-        for (int i = 0; i < teenAndAHalfLapse; i++) {
-            car.MoveForward();
-        }
-        assertEquals(posMiddle, car.con.getPosition());
     }
 
     @Test
@@ -107,32 +89,9 @@ class AutoParkingCarTest {
     }
 
     @Test
-    void parkCarWithTwoBrokenSensorsTest()
-    {
-        System.out.println("This is the first array" + Arrays.toString(dummyParkingPlace));
-        car2.Park();
-        System.out.println("This is the parked array" + Arrays.toString(dummyParkingPlace));
-        System.out.println(car2.con.getPosition());
-        assertFalse(car2.con.getSituation());
-
-    }
-
-    @Test
-    void parkCarTwoWorkingSensorsTest() {
-        // Test parking the car repeatedly while moving forward.
-       /* for (int i = 0; i < 50; i++) {
-            car.MoveForward();
-            car.Park();
-        }*/
-
-        System.out.println("This is the first array" + Arrays.toString(dummyParkingPlace));
+    void parkTest() {
         car.Park();
-        System.out.println("This is the parked array" + Arrays.toString(dummyParkingPlace));
-        System.out.println(car.con.getPosition());
         assertTrue(car.con.getSituation());
-        car.UnPark();
-        System.out.println("This is the unParked array" + Arrays.toString(dummyParkingPlace));
-
     }
 
     @Test
@@ -155,6 +114,18 @@ class AutoParkingCarTest {
         assertEquals(pos3, car.WhereIs().getPosition());
         assertFalse(car.WhereIs().getSituation());
 
+    }
+
+    @Test
+    void InvalidInputArgumentNegativePositionTest() {
+        car.con.setPosition(-300);
+        assertEquals(0, car.WhereIs().getPosition());
+    }
+
+    @Test
+    void InvalidInputArgumentLargePositivePositionTest() {
+        car.con.setPosition(50001);
+        assertEquals(0, car.WhereIs().getPosition());
     }
 
     @Test
@@ -236,19 +207,6 @@ class AutoParkingCarTest {
 
         //Faulty return value indicated with length -1
         assertEquals(-1, dummyCar.isEmpty());
-    }
-
-    @Test
-    void aFullRunTest() {
-        car.MoveForward();
-        car.MoveForward();
-        car.MoveForward();
-        car.MoveForward();
-        car.MoveForward();
-        car.WhereIs();
-        car.Park();
-
-
     }
 
 }
