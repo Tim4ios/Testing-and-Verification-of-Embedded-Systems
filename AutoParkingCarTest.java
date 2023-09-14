@@ -58,7 +58,7 @@ class AutoParkingCarTest {
     }
 
     @Test
-    void carShouldMoveUntillStopTest() {
+    void carShouldMoveUntilStopTest() {
         //Setting up variables for testing that it should keep move for 10½ lapse.
         int teenAndAHalfLapse = (10 * 501) + 250;
         int posMiddle = 25000;
