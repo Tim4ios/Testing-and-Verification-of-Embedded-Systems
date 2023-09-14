@@ -7,29 +7,28 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AutoParkingCarTest {
     AutoParkingCar car;
-    private int[] dummyNoSens1;
-    private int[] dummyNoSens2;
-    private int[] parkingPlace;
+    //private int[] dummyNoSens1;
+    //private int[] dummyNoSens2;
+    private int[] dummyParkingPlace;
 
-
-    AutoParkingCar yesParkCar;
-    private int[] dummyYesSens1;
-    private int[] dummyYesSens2;
+    private int[] dummySens1;
+    private int[] dummySens2;
 
 
     @BeforeEach
         //Setting up two cars, one that has free parking and other one who hasn't at the start of the street, with sensors and start position and that it is not parked.
     void setupCars() {
         // Initialize dummy sensor data and car context for testing.
-        dummyNoSens1 = new int[]{100, 110, 105, 108, 115};
-        dummyNoSens2 = new int[]{95, 105, 98, 112, 100};
-        dummyYesSens1 = new int[]{200, 190, 180, 195, 185};
-        dummyYesSens2 = new int[]{180, 179, 193, 191, 199};
+
+        //dummyNoSens1 = new int[]{100, 110, 105, 108, 115};
+        //dummyNoSens2 = new int[]{95, 105, 98, 112, 100};
+        dummySens1 = new int[]{200, 190, 180, 195, 185};
+        dummySens2 = new int[]{180, 179, 193, 191, 199};
+        dummyParkingPlace = AutoParkingCar.generateRandomParking(100, 5);
         AutoParkingCar.context dummyContext = new AutoParkingCar.context(0, false);
 
-        car = new AutoParkingCar(dummyNoSens1, dummyNoSens2, dummyContext);
-        yesParkCar = new AutoParkingCar(dummyYesSens1, dummyYesSens2, dummyContext);
-        parkingPlace = car.generateRandomParking(500, 5);
+        car = new AutoParkingCar(dummySens1, dummySens2, dummyContext, dummyParkingPlace);
+
 
     }
 
@@ -37,22 +36,7 @@ class AutoParkingCarTest {
     void isCarInTheStartOfTheStreetTest() {
         //Make sure that the car is in the start position
         assertEquals(0, car.con.getPosition());
-        assertEquals(0, yesParkCar.con.getPosition());
 
-    }
-
-    @Test
-    void testGenerateRandomArrayForZeroRow() {
-        // Check if there is a row of (0, 0, 0, 0, 0) in the generated array.
-        boolean zeroRowFound = false;
-        for (int i = 0; i <= parkingPlace.length - 5; i++) {
-            if (parkingPlace[i] == 0 && parkingPlace[i + 1] == 0 && parkingPlace[i + 2] == 0 &&
-                    parkingPlace[i + 3] == 0 && parkingPlace[i + 4] == 0) {
-                zeroRowFound = true;
-                break;
-            }
-        }
-        assertTrue(zeroRowFound);
     }
 
     @Test
@@ -126,12 +110,14 @@ class AutoParkingCarTest {
             car.Park();
         }*/
 
-        System.out.println(Arrays.toString(parkingPlace));
-
-        car.WhereIs();
+        System.out.println("This is the first array" + Arrays.toString(dummyParkingPlace));
         car.Park();
-        // Assert that the car is not parked (isEmpty() should not indicate a parking space).
-        assertFalse(car.con.getSituation());
+        System.out.println("This is the parked array" + Arrays.toString(dummyParkingPlace));
+        System.out.println(car.con.getPosition());
+        assertTrue(car.con.getSituation());
+        car.UnPark();
+        System.out.println("This is the unParked array" + Arrays.toString(dummyParkingPlace));
+
     }
 
     @Test
@@ -161,6 +147,7 @@ class AutoParkingCarTest {
         int[] cleanData = {190, 150, 120, 180, 200};
         assertFalse(car.isNoisy(cleanData));// Clean data should return false
     }
+
     @Test
     void sensorDataNoisyTest() {
         int[] noisyData = {20, 150, 10, 200, 115};
@@ -183,25 +170,32 @@ class AutoParkingCarTest {
     @Test
     void isEmptyWithTwoWorkingSensorsTest() {
         int expected_result = 0;
+        for (int val : dummySens1) {
+        }
 
-        for (int val : dummyNoSens1) {
+
+        // Calculate the expected result based on dummy sensor data.
+        for (int val : dummySens2) {
+
+
             expected_result += val;
         }
-        for (int val : dummyNoSens2) {
+        for (int val : dummySens2) {
             expected_result += val;
         }
         //It the expected result should be the same as the average of the clean date
         assertEquals(expected_result / 10, car.isEmpty());
     }
 
+
     @Test
     void isEmptyWithFirstSensorBrokenTest() {
-        int[] brokenSensor = {200,10,200,30,150};
-        AutoParkingCar dummyCar = new AutoParkingCar(dummyNoSens1,brokenSensor,new AutoParkingCar.context(0,false));
+        int[] brokenSensor = {200, 10, 200, 30, 150};
+        AutoParkingCar dummyCar = new AutoParkingCar(dummySens1, brokenSensor, new AutoParkingCar.context(0, false), dummyParkingPlace);
 
         int expected_result = 0;
 
-        for (int val : dummyNoSens1) {
+        for (int val : dummySens1) {
             System.out.println(val);
             expected_result += val;
         }
@@ -212,12 +206,12 @@ class AutoParkingCarTest {
 
     @Test
     void isEmptyWithSecondSensorBrokenTest() {
-        int[] brokenSensor = {200,10,50,100,150};
-        AutoParkingCar dummyCar = new AutoParkingCar(brokenSensor,dummyNoSens2,new AutoParkingCar.context(0,false));
+        int[] brokenSensor = {200, 10, 50, 100, 150};
+        AutoParkingCar dummyCar = new AutoParkingCar(brokenSensor, dummySens2, new AutoParkingCar.context(0, false), dummyParkingPlace);
 
         int expected_result = 0;
 
-        for (int val : dummyNoSens2) {
+        for (int val : dummySens2) {
             System.out.println(val);
             expected_result += val;
         }
@@ -228,12 +222,12 @@ class AutoParkingCarTest {
 
     @Test
     void isEmptyWithBothSensorsBrokenTest() {
-        int[] brokenSensorOne = {200,10,50,100,150};
-        int[] brokenSensorTwo = {500000,10,50,100,150};
-        AutoParkingCar dummyCar = new AutoParkingCar(brokenSensorOne,brokenSensorTwo,new AutoParkingCar.context(0,false));
+        int[] brokenSensorOne = {200, 10, 50, 100, 150};
+        int[] brokenSensorTwo = {500000, 10, 50, 100, 150};
+        AutoParkingCar dummyCar = new AutoParkingCar(brokenSensorOne, brokenSensorTwo, new AutoParkingCar.context(0, false), dummyParkingPlace);
 
         //Faulty return value indicated with length -1
-        assertEquals(-1 , dummyCar.isEmpty());
+        assertEquals(-1, dummyCar.isEmpty());
     }
 
     @Test

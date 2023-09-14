@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Random;
 
 public class AutoParkingCar {
@@ -41,17 +42,16 @@ public class AutoParkingCar {
     }
 
 
-    public AutoParkingCar(int[] sens1, int[] sens2, context con) {
+    public AutoParkingCar(int[] sens1, int[] sens2, context con, int[] parkP) {
         this.con = con;
         con.position = 0;
         con.situation = false;
         ultraSoundSensorOne = sens1;
         ultraSoundSensorTwo = sens2;
-        parkingPlace = generateRandomParking(500, 5);
-
+        parkingPlace = parkP;
     }
 
-    public int[] generateRandomParking(int length, int groupSize) {
+    public static int[] generateRandomParking(int length, int groupSize) {
         int[] array = new int[length];
         Random random = new Random();
 
@@ -94,7 +94,7 @@ public class AutoParkingCar {
     public context MoveForward() {
         if (con.position >= endOfTheStreet) {
             //start over from start?
-
+            counter = 0;
             con.position = startOfStreet;
             return null;
         } else {
@@ -262,22 +262,23 @@ public class AutoParkingCar {
      * ...?
      */
     public context Park() {
-        for (int i = 0; i <= parkingPlace.length - 5; i++) {
-            if (parkingPlace[i] == 0 && parkingPlace[i + 1] == 0 && parkingPlace[i + 2] == 0 &&
-                    parkingPlace[i + 3] == 0 && parkingPlace[i + 4] == 0) {
-                MoveForward();
-                parkingSpot = true;
-                break;
-            }
-        }
-            if (isEmpty() > 180 && parkingSpot) {
-                con.situation = true;
-                System.out.println("You parked your car");
-            }
-            return con;
+        while (parkingPlace[counter] != 0)
+            MoveForward();
+        if (parkingPlace[counter] == 0 && parkingPlace[counter + 1] == 0 && parkingPlace[counter + 2] == 0 &&
+                parkingPlace[counter + 3] == 0 && parkingPlace[counter + 4] == 0) {
+            parkingSpot = true;
         }
 
 
+        if (isEmpty() > 180 && parkingSpot) {
+            con.situation = true;
+            for (int i = 0; i < 5; i++) {
+                parkingPlace[counter++] = 3;
+            }
+            System.out.println("You parked your car");
+        }
+        return con;
+    }
 
     /**
      * Description:
@@ -295,6 +296,13 @@ public class AutoParkingCar {
      */
     public context UnPark() {
         con.situation = false;
+        int tempCount = counter;
+        for (int i = 0; i <= 5 && tempCount < parkingPlace.length; i++) {
+            parkingPlace[tempCount] = 0;
+            tempCount--;
+            if (tempCount < 0)
+                tempCount = 0;
+        }
         return con;
 
     }
