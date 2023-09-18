@@ -104,7 +104,7 @@ public class AutoParkingCar {
      */
     public context MoveForward() {
         //This checks so if we are already parked, we cannot moveforward.
-        //Solves didCarMoveForwardTest, tryToMoveForwardParkTest
+        //Solves tryToMoveForwardParkTest
         if (con.situation)
             return con;
         //This makes the car a U-turn and starts at Start of the street again.
@@ -114,6 +114,7 @@ public class AutoParkingCar {
             con.position = startOfStreet;
         }
         //Else we update the current position.
+        //solves didCarMoveForwardTest
         else {
             con.position = con.position + oneMeter;
             counter++;
@@ -150,11 +151,12 @@ public class AutoParkingCar {
      */
     public context MoveBackwards() {
         //This checks so if we are already parked, we cannot movebackwards.
-        //Solves didCarMoveBackwardsTest, tryToMoveBackwardsWhileParkedTest
+        //Solves tryToMoveBackwardsWhileParkedTest
         if (con.situation)
             return con;
 
         //we update the current position.
+        //Solves didCarMoveBackwardsTest
         con.position = con.position - oneMeter;
 
         //If we are at the start of the street and move backwards, we just start over from start. cannot back to negative values
