@@ -103,25 +103,31 @@ public class AutoParkingCar {
      * didTheCarMoveToEndOfStreetAndStartOverFromTheBeginningTest
      */
     public context MoveForward() {
+        //This checks so if we are already parked, we cannot moveforward.
         if (con.situation)
             return con;
+        //This makes the car a U-turn and starts at Start of the street again.
         if (con.position >= endOfTheStreet) {
             counter = 0;
             con.position = startOfStreet;
-        } else {
+        }
+        //Else we update the current position.
+        else {
             con.position = con.position + oneMeter;
             counter++;
             //For actual implementation of a real parking-place.
             /*if (isEmpty() > 180);
                 parkingSpots[counter] = 0;
             parkingSpots[counter] = 1;*/
+
+            //Need to check so that the parkingSpot is empty and free to park.
             if (isEmpty() > 180)
                 parkingCounter++;
 
 
         }
 
-
+        //returns the context
         return con;
     }
 
@@ -141,11 +147,14 @@ public class AutoParkingCar {
      * shouldNotMoveBackwardsIfAtStartTest
      */
     public context MoveBackwards() {
+        //This checks so if we are already parked, we cannot movebackwards.
         if (con.situation)
             return con;
 
+        //we update the current position.
         con.position = con.position - oneMeter;
 
+        //If we are at the start of the street and move backwards, we just start over from start. cannot back to negative values
         if (con.position <= startOfStreet) {
             con.position = 0;
         }
@@ -284,13 +293,15 @@ public class AutoParkingCar {
         if (con.situation)
             return con;
 
+        //Searching for the next avaible free parking spot.
         while (parkingPlace[counter] != 0)
             MoveForward();
+        //This checks so that all the 5 meters parking spot are avaible. So no car has parked over two parkingspots.
         if (parkingPlace[counter] == 0 && parkingPlace[counter + 1] == 0 && parkingPlace[counter + 2] == 0 &&
                 parkingPlace[counter + 3] == 0 && parkingPlace[counter + 4] == 0) {
             parkingSpot = true;
         }
-
+        //We check so that parkingSpot is free and that the all 5 meters are free for parking
         if (isEmpty() > 180 && parkingSpot) {
             con.situation = true;
             for (int i = 0; i < 5; i++) {

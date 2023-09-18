@@ -14,13 +14,14 @@ class AutoParkingCarTest {
 
 
     @BeforeEach
-        //Setting up two cars, one that has free parking and other one who hasn't at the start of the street, with sensors and start position and that it is not parked.
+        //Setting up two cars, one that has free parking and other one who hasn't at the start of the street,
+        // with sensors and start position and that it is not parked.
     void setupCars() {
         // Initialize dummy sensor data and car context for testing.
 
         dummySens1 = new int[]{200, 190, 180, 195, 185};
         dummySens2 = new int[]{180, 179, 193, 191, 199};
-        dummyParkingFirstSpot = new int[] {0,0,0,0,0};
+        dummyParkingFirstSpot = new int[]{0, 0, 0, 0, 0};
 
         dummyParkingPlace = AutoParkingCar.generateRandomParking(500, 5);
         AutoParkingCar.context dummyContext = new AutoParkingCar.context(0, false);
@@ -32,10 +33,10 @@ class AutoParkingCarTest {
     }
 
 
-
-
 /**------------------------------------------------------------------------------------------------------------------**/
-    /**TESTS FOR WhereIs() METHOD**/
+    /**
+     * TESTS FOR WhereIs() METHOD
+     **/
     @Test
     void whereIsCarTest() {
         // Test whether the WhereIs method returns car position and situation correctly.
@@ -51,7 +52,9 @@ class AutoParkingCarTest {
     }
 
 /**------------------------------------------------------------------------------------------------------------------**/
-    /**TESTS FOR MoveForwards() METHOD**/
+    /**
+     * TESTS FOR MoveForwards() METHOD
+     **/
     @Test
     void didCarMoveForwardTest() {
         // Test whether the car can move forward correctly.
@@ -65,6 +68,7 @@ class AutoParkingCarTest {
 
 
     }
+
     @Test
     void tryToMoveForwardParkTest() {
         // Try to move forward while the car is parked
@@ -88,7 +92,9 @@ class AutoParkingCarTest {
         assertEquals(0, car.con.getPosition());
     }
 /**------------------------------------------------------------------------------------------------------------------**/
-/**TESTS FOR MoveBackwards() METHOD**/
+    /**
+     * TESTS FOR MoveBackwards() METHOD
+     **/
     @Test
     void didCarMoveBackwardsTest() {
         // Test whether the car can move backward correctly.
@@ -105,6 +111,7 @@ class AutoParkingCarTest {
 
 
     }
+
     @Test
     void tryToMoveBackwardsWhileParkedTest() {
         // Try to move backward while the car is parked
@@ -122,7 +129,9 @@ class AutoParkingCarTest {
     }
 
 /**------------------------------------------------------------------------------------------------------------------**/
-/**TESTS FOR Park() METHOD**/
+    /**
+     * TESTS FOR Park() METHOD
+     **/
     @Test
     void parkCarTest() {
         //unpark car in case it is parked
@@ -130,6 +139,7 @@ class AutoParkingCarTest {
         car.Park();
         assertTrue(car.con.getSituation());
     }
+
     @Test
     void parkCarWhenParkedTest() {
         //Check that you cannot park while parked
@@ -138,7 +148,9 @@ class AutoParkingCarTest {
         assertTrue(car.con.getSituation());
     }
 /**------------------------------------------------------------------------------------------------------------------**/
-    /**TESTS FOR UnPark() METHOD**/
+    /**
+     * TESTS FOR UnPark() METHOD
+     **/
     @Test
     void unParkTest() {
         // Test if the car can be unparked.
@@ -151,6 +163,7 @@ class AutoParkingCarTest {
         // Assert that the car is not parked.
         assertEquals(resultPosition, car.con.getPosition());
     }
+
     @Test
     void unParkCarWhenParkedTest() {
         // Check that you cannot unpark if not parked
@@ -160,7 +173,9 @@ class AutoParkingCarTest {
 
     }
 /**------------------------------------------------------------------------------------------------------------------**/
-    /**TESTS FOR setPosition() & getPosition() METHOD**/
+    /**
+     * TESTS FOR setPosition() & getPosition() METHOD
+     **/
     @Test
     void InvalidInputArgumentNegativePositionTest() {
         //Test the context object for not setting negative values
@@ -176,7 +191,9 @@ class AutoParkingCarTest {
     }
 
 /**------------------------------------------------------------------------------------------------------------------**/
-    /**TESTS FOR isNoisy() METHOD**/
+    /**
+     * TESTS FOR isNoisy() METHOD
+     **/
     @Test
     void sensorDataNotNoisyTest() {
         int[] cleanData = {190, 150, 120, 180, 200};
@@ -202,7 +219,9 @@ class AutoParkingCarTest {
     }
 
 /**------------------------------------------------------------------------------------------------------------------**/
-    /**TESTS FOR isEmpty() METHOD**/
+    /**
+     * TESTS FOR isEmpty() METHOD
+     **/
     @Test
     void isEmptyWithTwoWorkingSensorsTest() {
         int expected_result = 0;
