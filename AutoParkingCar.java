@@ -171,7 +171,7 @@ public class AutoParkingCar {
      * sensorDataTooBigTest
      */
     boolean isNoisy(int[] sensorData) {
-        //illegal startvalue
+        //illegal startvalue, fixes sensorDataNegativeTest & sensorDataTooBigTest
         if (sensorData[0] > 200 || sensorData[0] < 0) return true;
 
         int max = sensorData[0];
@@ -179,7 +179,8 @@ public class AutoParkingCar {
 
 
         for (int i = 1; i < sensorData.length; i++) {
-
+            
+            //value, fixes sensorDataNegativeTest & sensorDataTooBigTest
             if (sensorData[i] < 0 || sensorData[i] > 200) return true;
 
             if (sensorData[i] > max) {
@@ -189,7 +190,8 @@ public class AutoParkingCar {
             } else if (sensorData[i] < min) min = sensorData[i];
 
         }
-        //If the difference between the largest and smalles data exceeds 120 the data is noisy
+        //If the difference between the largest and smallest data exceeds 120 the data is noisy
+        //Satisfies sensorDataNoisyTest & sensorDataNotNoisyTest
         return 120 < Math.abs(max - min);
 
     }
@@ -222,16 +224,17 @@ public class AutoParkingCar {
             fiveSensValuesTwo[i] = ultraSoundSensorTwo[context];
             context++;
         }
-
+        
+        //First sensor is noisy, satisfies isEmptyWithFirstSensorBrokenTest
         if (isNoisy(fiveSensValuesOne)) {
-            //First sensor is noisy
 
+            //Both sensors are noisy/broken, satisfies isEmptyWithBothSensorsBrokenTest
             if (isNoisy(fiveSensValuesTwo)) {
-                //Both sensors are noisy/broken
+                
                 return -1;
+              //Second sensor is working  
             } else {
 
-                //Second sensor is working
                 for (int value : fiveSensValuesTwo) {
                     distance += value;
                 }
@@ -239,9 +242,10 @@ public class AutoParkingCar {
             }
 
         }
-
+        
+        //second sensor is noisy and first one is not, , satisfies isEmptyWithSecondSensorBrokenTest
         if (isNoisy(fiveSensValuesTwo)) {
-            //second sensor is noisy and first one is not
+            
             for (int value : fiveSensValuesOne) {
                 distance += value;
             }
@@ -249,7 +253,7 @@ public class AutoParkingCar {
         }
 
 
-        // Both sensors are reliable, handle this case accordingly
+        // Both sensors are reliable, handle this case accordingly, satisfies isEmptyWithTwoWorkingSensorsTest
         for (int value : fiveSensValuesOne) {
             distance += value;
         }
