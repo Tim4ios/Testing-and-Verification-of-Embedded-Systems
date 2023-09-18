@@ -92,15 +92,15 @@ public class AutoParkingCar {
      * described below and returns a data structure that contains the current position of the car, and the situation
      * of the detected parking places up to now. The car cannot be moved forward beyond the end of the street.
      * <p>
-     * Pre-condition: Car is not at the end of the street
+     * Pre-condition: Check that car is not parked and car is not at the end of the street
      * <p>
      * Post-condition: Car has moved 1 meter forward and has returned a data structure containing the current position of
      * the car and the situation
      * <p>
      * Test-cases:
      * MoveForwardFromStartTest
-     * MoveForwardFromEndOfStreet
-     * ...?
+     * tryToMoveForwardParkTest
+     * didTheCarMoveToEndOfStreetAndStartOverFromTheBeginningTest
      */
     public context MoveForward() {
         if (con.situation)
@@ -130,15 +130,15 @@ public class AutoParkingCar {
      * MoveBackward: The same as above; only it moves the car 1 meter backwards. The car cannot be moved behind if it is
      * already at the beginning of the street.
      * <p>
-     * Pre-condition: Car is not at the beginning of the street
+     * Pre-condition: Car is not parked and car is not at the beginning of the street
      * <p>
      * Post-condition: Car has moved 1 meter backward and has returned a data structure containing the current position of
      * the car and the situation.
      * <p>
      * Test-cases:
-     * MoveBackwardsFromStartTest
-     * MoveBackwardsFromEndOfStreet
-     * ...?
+     * didCarMoveBackwardsTest
+     * tryToMoveBackwardsWhileParkedTest
+     * shouldNotMoveBackwardsIfAtStartTest
      */
     public context MoveBackwards() {
         if (con.situation)
@@ -160,7 +160,7 @@ public class AutoParkingCar {
      * value in the array exceeds 200 or is below 0 returns true. We then iterate through the array and find the smallest
      * and biggest values and if the difference is bigger than 120 then return true. Otherwise, return false
      * <p>
-     * Pre-condition: Sensor data has at least 1 value
+     * Pre-condition: Check for illegal startvalues must be between 0 and 200
      * <p>
      * Post-condition: returns the correct boolean value
      * <p>
@@ -169,7 +169,6 @@ public class AutoParkingCar {
      * sensorDataNoisyTest
      * sensorDataNegativeTest
      * sensorDataTooBigTest
-     * ...?
      */
     boolean isNoisy(int[] sensorData) {
         //illegal startvalue
@@ -211,7 +210,6 @@ public class AutoParkingCar {
      * isEmptyWithFirstSensorBrokenTest
      * isEmptyWithSecondSensorBrokenTest
      * isEmptyWithBothSensorsBrokenTest
-     * ...?
      */
     int isEmpty() {
         int distance = 0;
@@ -269,15 +267,13 @@ public class AutoParkingCar {
      * detected or moves the car forwards towards the end of the street until such a stretch is detected. Then it
      * performs a pre-programmed reverse parallel parking maneuver.
      * <p>
-     * Pre-condition: There is an available parkingspot
+     * Pre-condition: There is an available parkingspot and the car is not already parked
      * <p>
-     * Post-condition: The car should be parked
+     * Post-condition: The car should be parked thus returning an object indicating that it is
      * <p>
      * Test-cases:
-     * parkWhenNoSpaceTest
-     * parkWhenFirstSpaceIsFreeTest
-     * ...
-     * ...?
+     * parkCarTest
+     * parkCarWhenParkedTest
      */
     public context Park() {
         //If we already are parked, do nothing
@@ -306,15 +302,13 @@ public class AutoParkingCar {
      * Description:
      * UnPark: It moves the car forward (and to left) to front of the parking place, if it is parked.
      * <p>
-     * Pre-condition: That we are not at the end of the street and that we are parked
+     * Pre-condition: Check that we are parked, if not parked we cannot unpark
      * <p>
-     * Post-condition: The car should be unparked and moved forward
+     * Post-condition: The car should be unparked and moved forward also altering the situation of the car, returning an object with the situation
      * <p>
      * Test-cases:
-     * UnparkWhenCarIsParkedTest
-     * UnparkWhenCarisNotParkedTest
-     * UnparkWhenAtEndOfStreetTest
-     * ...?
+     * unParkTest
+     * unParkCarWhenParkedTest
      */
     public context UnPark() {
         //If we already are unParked, do nothing
@@ -337,19 +331,15 @@ public class AutoParkingCar {
      * WhereIs: This method returns the current position of the car in the street as well as its situation
      * (whether it is parked or not).
      * <p>
-     * Pre-condition: Car exists?
+     * Pre-condition: Return status of car
      * <p>
      * Post-condition: The position and situation is returned successfully
      * <p>
      * Test-cases:
-     * CarIsParkedTest
-     * CarisNotParkedTest
-     * ...
-     * ...?
+     * whereIsCarTest
      */
     public context WhereIs() {
         return con;
-
     }
 
 }

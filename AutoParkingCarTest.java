@@ -67,6 +67,7 @@ class AutoParkingCarTest {
     }
     @Test
     void tryToMoveForwardParkTest() {
+        // Try to move forward while the car is parked
         car.Park();
         int resultPosition = car.con.getPosition();
         car.MoveForward();
@@ -106,6 +107,7 @@ class AutoParkingCarTest {
     }
     @Test
     void tryToMoveBackwardsWhileParkedTest() {
+        // Try to move backward while the car is parked
         car.Park();
         int resultPosition = car.con.getPosition();
         car.MoveBackwards();
@@ -130,6 +132,7 @@ class AutoParkingCarTest {
     }
     @Test
     void parkCarWhenParkedTest() {
+        //Check that you cannot park while parked
         car.con.setSituation(true);
         car.Park();
         assertTrue(car.con.getSituation());
@@ -150,6 +153,7 @@ class AutoParkingCarTest {
     }
     @Test
     void unParkCarWhenParkedTest() {
+        // Check that you cannot unpark if not parked
         car.con.setSituation(false);
         car.UnPark();
         assertFalse(car.con.getSituation());
@@ -159,12 +163,14 @@ class AutoParkingCarTest {
     /**TESTS FOR setPosition() & getPosition() METHOD**/
     @Test
     void InvalidInputArgumentNegativePositionTest() {
+        //Test the context object for not setting negative values
         car.con.setPosition(-300);
         assertEquals(0, car.WhereIs().getPosition());
     }
 
     @Test
     void InvalidInputArgumentLargePositivePositionTest() {
+        //Test the context object for not setting values bigger then the road
         car.con.setPosition(50001);
         assertEquals(0, car.WhereIs().getPosition());
     }
