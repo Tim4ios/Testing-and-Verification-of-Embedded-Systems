@@ -104,9 +104,11 @@ public class AutoParkingCar {
      */
     public context MoveForward() {
         //This checks so if we are already parked, we cannot moveforward.
+        //Solves didCarMoveForwardTest, tryToMoveForwardParkTest
         if (con.situation)
             return con;
         //This makes the car a U-turn and starts at Start of the street again.
+        //Solves didTheCarMoveToEndOfStreetAndStartOverFromTheBeginningTest
         if (con.position >= endOfTheStreet) {
             counter = 0;
             con.position = startOfStreet;
@@ -148,6 +150,7 @@ public class AutoParkingCar {
      */
     public context MoveBackwards() {
         //This checks so if we are already parked, we cannot movebackwards.
+        //Solves didCarMoveBackwardsTest, tryToMoveBackwardsWhileParkedTest
         if (con.situation)
             return con;
 
@@ -155,6 +158,7 @@ public class AutoParkingCar {
         con.position = con.position - oneMeter;
 
         //If we are at the start of the street and move backwards, we just start over from start. cannot back to negative values
+        //Solves shouldNotMoveBackwardsIfAtStartTest
         if (con.position <= startOfStreet) {
             con.position = 0;
         }
@@ -290,6 +294,7 @@ public class AutoParkingCar {
      */
     public context Park() {
         //If we already are parked, do nothing
+        //Solves parkCarWhenParkedTest
         if (con.situation)
             return con;
 
@@ -297,11 +302,13 @@ public class AutoParkingCar {
         while (parkingPlace[counter] != 0)
             MoveForward();
         //This checks so that all the 5 meters parking spot are avaible. So no car has parked over two parkingspots.
+        //Also so that the parkingspot is no avabile anymore
         if (parkingPlace[counter] == 0 && parkingPlace[counter + 1] == 0 && parkingPlace[counter + 2] == 0 &&
                 parkingPlace[counter + 3] == 0 && parkingPlace[counter + 4] == 0) {
             parkingSpot = true;
         }
         //We check so that parkingSpot is free and that the all 5 meters are free for parking
+        //Solves parkCarTest
         if (isEmpty() > 180 && parkingSpot) {
             con.situation = true;
             for (int i = 0; i < 5; i++) {
@@ -327,9 +334,12 @@ public class AutoParkingCar {
      */
     public context UnPark() {
         //If we already are unParked, do nothing
+        //Solves unParkCarWhenParkedTest
         if (!con.situation)
             return con;
 
+        //If we unpark the car. we should set the parkingspot to avaible again
+        //Solves unParkTest
         con.situation = false;
         int tempCount = counter;
         for (int i = 0; i <= 5 && tempCount < parkingPlace.length; i++) {
@@ -354,6 +364,7 @@ public class AutoParkingCar {
      * whereIsCarTest
      */
     public context WhereIs() {
+        //Solves whereIsCarTest
         return con;
     }
 
