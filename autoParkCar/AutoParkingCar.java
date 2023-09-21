@@ -1,4 +1,7 @@
+package autoParkCar;
+
 import java.util.Random;
+
 
 public class AutoParkingCar {
     public context con;
@@ -185,7 +188,7 @@ public class AutoParkingCar {
      * sensorDataNegativeTest
      * sensorDataTooBigTest
      */
-    boolean isNoisy(int[] sensorData) {
+    public boolean isNoisy(int[] sensorData) {
         //illegal startvalue, fixes sensorDataNegativeTest & sensorDataTooBigTest
         if (sensorData[0] > 200 || sensorData[0] < 0) return true;
 
@@ -194,7 +197,7 @@ public class AutoParkingCar {
 
 
         for (int i = 1; i < sensorData.length; i++) {
-            
+
             //value, fixes sensorDataNegativeTest & sensorDataTooBigTest
             if (sensorData[i] < 0 || sensorData[i] > 200) return true;
 
@@ -228,7 +231,7 @@ public class AutoParkingCar {
      * isEmptyWithSecondSensorBrokenTest
      * isEmptyWithBothSensorsBrokenTest
      */
-    int isEmpty() {
+    public int isEmpty() {
         int distance = 0;
         int context = carPos / 100;
         int[] fiveSensValuesOne = new int[5];
@@ -239,15 +242,15 @@ public class AutoParkingCar {
             fiveSensValuesTwo[i] = ultraSoundSensorTwo[context];
             context++;
         }
-        
+
         //First sensor is noisy, satisfies isEmptyWithFirstSensorBrokenTest
         if (isNoisy(fiveSensValuesOne)) {
 
             //Both sensors are noisy/broken, satisfies isEmptyWithBothSensorsBrokenTest
             if (isNoisy(fiveSensValuesTwo)) {
-                
+
                 return -1;
-              //Second sensor is working  
+                //Second sensor is working
             } else {
 
                 for (int value : fiveSensValuesTwo) {
@@ -257,10 +260,10 @@ public class AutoParkingCar {
             }
 
         }
-        
+
         //second sensor is noisy and first one is not, , satisfies isEmptyWithSecondSensorBrokenTest
         if (isNoisy(fiveSensValuesTwo)) {
-            
+
             for (int value : fiveSensValuesOne) {
                 distance += value;
             }
@@ -322,7 +325,6 @@ public class AutoParkingCar {
     }
 
     /**
-     *
      * Description:
      * UnPark: It moves the car forward (and to left) to front of the parking place, if it is parked.
      * <p>

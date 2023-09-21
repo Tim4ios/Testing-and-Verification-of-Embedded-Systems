@@ -1,7 +1,7 @@
+import autoParkCar.AutoParkingCar;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class AutoParkingCarTest {
     AutoParkingCar car;
@@ -44,10 +44,9 @@ class AutoParkingCarTest {
         for (int i = 0; i < 3; i++) {
             car.MoveForward();
         }
-
         // Assert that the position and situation match the expected values.
-        assertEquals(pos3, car.WhereIs().getPosition());
-        assertFalse(car.WhereIs().getSituation());
+        Assertions.assertEquals(pos3, car.WhereIs().getPosition());
+        Assertions.assertFalse(car.WhereIs().getSituation());
 
     }
 
@@ -63,8 +62,8 @@ class AutoParkingCarTest {
             car.MoveForward();
         }
         // Assert that the car's position is updated correctly and not parked.
-        assertEquals(600, car.con.getPosition());
-        assertFalse(car.con.getSituation());
+        Assertions.assertEquals(600, car.con.getPosition());
+        Assertions.assertFalse(car.con.getSituation());
 
 
     }
@@ -75,7 +74,7 @@ class AutoParkingCarTest {
         car.Park();
         int resultPosition = car.con.getPosition();
         car.MoveForward();
-        assertEquals(resultPosition, car.con.getPosition());
+        Assertions.assertEquals(resultPosition, car.con.getPosition());
     }
 
     @Test
@@ -83,13 +82,13 @@ class AutoParkingCarTest {
         // Set the car's position to the end of the street.
         car.con.setPosition(50000);
         // Assert that the car's position is set correctly to the end of the street.
-        assertEquals(50000, car.con.getPosition());
+        Assertions.assertEquals(50000, car.con.getPosition());
 
 
         // Move the car forward, which should wrap it around to the beginning of the street.
         car.MoveForward();
         // Assert that the car's position is now at the beginning of the street (startOver).
-        assertEquals(0, car.con.getPosition());
+        Assertions.assertEquals(0, car.con.getPosition());
     }
 /**------------------------------------------------------------------------------------------------------------------**/
     /**
@@ -106,8 +105,8 @@ class AutoParkingCarTest {
         }
 
         // Assert that the car's position is updated correctly and not parked.
-        assertEquals(pos5, car.con.getPosition());
-        assertFalse(car.con.getSituation());
+        Assertions.assertEquals(pos5, car.con.getPosition());
+        Assertions.assertFalse(car.con.getSituation());
 
 
     }
@@ -118,14 +117,14 @@ class AutoParkingCarTest {
         car.Park();
         int resultPosition = car.con.getPosition();
         car.MoveBackwards();
-        assertEquals(resultPosition, car.con.getPosition());
+        Assertions.assertEquals(resultPosition, car.con.getPosition());
     }
 
     @Test
     void shouldNotMoveBackwardsIfAtStartTest() {
         // Test so the car can't move out of the street backwards
         car.MoveBackwards();
-        assertEquals(0, car.con.getPosition());
+        Assertions.assertEquals(0, car.con.getPosition());
     }
 
 /**------------------------------------------------------------------------------------------------------------------**/
@@ -137,7 +136,7 @@ class AutoParkingCarTest {
         //unpark car in case it is parked
         car.UnPark();
         car.Park();
-        assertTrue(car.con.getSituation());
+        Assertions.assertTrue(car.con.getSituation());
     }
 
     @Test
@@ -145,7 +144,7 @@ class AutoParkingCarTest {
         //Check that you cannot park while parked
         car.con.setSituation(true);
         car.Park();
-        assertTrue(car.con.getSituation());
+        Assertions.assertTrue(car.con.getSituation());
     }
 /**------------------------------------------------------------------------------------------------------------------**/
     /**
@@ -161,7 +160,7 @@ class AutoParkingCarTest {
         int resultPosition = car.con.getPosition();
         car.UnPark();
         // Assert that the car is not parked.
-        assertEquals(resultPosition, car.con.getPosition());
+        Assertions.assertEquals(resultPosition, car.con.getPosition());
     }
 
     @Test
@@ -169,7 +168,7 @@ class AutoParkingCarTest {
         // Check that you cannot unpark if not parked
         car.con.setSituation(false);
         car.UnPark();
-        assertFalse(car.con.getSituation());
+        Assertions.assertFalse(car.con.getSituation());
 
     }
 /**------------------------------------------------------------------------------------------------------------------**/
@@ -180,14 +179,14 @@ class AutoParkingCarTest {
     void InvalidInputArgumentNegativePositionTest() {
         //Test the context object for not setting negative values
         car.con.setPosition(-300);
-        assertEquals(0, car.WhereIs().getPosition());
+        Assertions.assertEquals(0, car.WhereIs().getPosition());
     }
 
     @Test
     void InvalidInputArgumentLargePositivePositionTest() {
         //Test the context object for not setting values bigger then the road
         car.con.setPosition(50001);
-        assertEquals(0, car.WhereIs().getPosition());
+        Assertions.assertEquals(0, car.WhereIs().getPosition());
     }
 
 /**------------------------------------------------------------------------------------------------------------------**/
@@ -197,25 +196,25 @@ class AutoParkingCarTest {
     @Test
     void sensorDataNotNoisyTest() {
         int[] cleanData = {190, 150, 120, 180, 200};
-        assertFalse(car.isNoisy(cleanData));// Clean data should return false
+        Assertions.assertFalse(car.isNoisy(cleanData));// Clean data should return false
     }
 
     @Test
     void sensorDataNoisyTest() {
         int[] noisyData = {20, 150, 10, 200, 115};
-        assertTrue(car.isNoisy(noisyData)); // Noisy data should return true
+        Assertions.assertTrue(car.isNoisy(noisyData)); // Noisy data should return true
     }
 
     @Test
     void sensorDataNegativeTest() {
         int[] cleanData = {0, 0, 0, 0, -1};
-        assertTrue(car.isNoisy(cleanData));// Noisy data should return true
+        Assertions.assertTrue(car.isNoisy(cleanData));// Noisy data should return true
     }
 
     @Test
     void sensorDataTooBigTest() {
         int[] cleanData = {200, 190, 201, 198, 189};
-        assertTrue(car.isNoisy(cleanData));// Noisy data should return true
+        Assertions.assertTrue(car.isNoisy(cleanData));// Noisy data should return true
     }
 
 /**------------------------------------------------------------------------------------------------------------------**/
@@ -236,7 +235,7 @@ class AutoParkingCarTest {
             expected_result += val;
         }
         //It the expected result should be the same as the average of the clean date
-        assertEquals(expected_result / 10, car.isEmpty());
+        Assertions.assertEquals(expected_result / 10, car.isEmpty());
     }
 
     @Test
@@ -251,7 +250,7 @@ class AutoParkingCarTest {
         }
 
         //It the expected result should only take the average of the working sensor, being the second one
-        assertEquals(expected_result / 5, dummyCar.isEmpty());
+        Assertions.assertEquals(expected_result / 5, dummyCar.isEmpty());
     }
 
     @Test
@@ -266,7 +265,7 @@ class AutoParkingCarTest {
         }
 
         //It the expected result should only take the average of the working sensor, being the second one
-        assertEquals(expected_result / 5, dummyCar.isEmpty());
+        Assertions.assertEquals(expected_result / 5, dummyCar.isEmpty());
     }
 
     @Test
@@ -276,7 +275,7 @@ class AutoParkingCarTest {
         AutoParkingCar dummyCar = new AutoParkingCar(brokenSensorOne, brokenSensorTwo, new AutoParkingCar.context(0, false), dummyParkingPlace);
 
         //Faulty return value indicated with length -1
-        assertEquals(-1, dummyCar.isEmpty());
+        Assertions.assertEquals(-1, dummyCar.isEmpty());
     }
 
 }
