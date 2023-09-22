@@ -1,4 +1,6 @@
-import autoParkCar.AutoParkingCar;
+package Phase_1.test1;
+
+import Phase_1.AutoParkingCar;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
