@@ -1,23 +1,18 @@
 public class Actuator {
     private int currentPosition;
 
-
     public Actuator() {
         // Initialize the actuator with a starting position
         this.currentPosition = 0;
     }
 
-    public void moveForward(int distance) {
+    public void drive(AutoParkingCar.context con) {
         // Simulate moving forward
-        currentPosition += distance;
-    }
+        con.setPosition(currentPosition-100);    }
 
-    public void moveBackward(int distance) {
+    public void reverse(AutoParkingCar.context con) {
         // Simulate moving backward
-        currentPosition -= distance;
+        con.setPosition(currentPosition-100);
     }
 
-    public int getCurrentPosition() {
-        return currentPosition;
-    }
 }
