@@ -5,7 +5,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -14,11 +17,8 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class SensorDataTest {
-
-    private SensorData sensorData;
-
-    @Mock
-    SensorData databaseMock;
+    //@Mock
+    //SensorData sensorDataMock;
 
 
     @BeforeEach
@@ -28,6 +28,12 @@ public class SensorDataTest {
 
     @Test
     public void testingTheReturnOfTheSensorData() {
+        SensorData sensorDataMock = Mockito.mock(SensorData.class);
+        SensorData sd = new SensorData();
+        sensorDataMock.returnSensorData(500);
+
+        System.out.println(Arrays.toString(sd.returnSensorData(500)));
+
     }
 
 
