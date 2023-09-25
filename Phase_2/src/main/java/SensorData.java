@@ -1,5 +1,5 @@
 
-public class Database {
+public class SensorData {
     public boolean isAvailable() {
         // currently not implemented, as this is just demo used in a software test
         return false;
