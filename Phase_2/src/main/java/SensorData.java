@@ -1,11 +1,10 @@
-
 public class SensorData {
-    public boolean isAvailable() {
-        // currently not implemented, as this is just demo used in a software test
-        return false;
+
+    private int[] arr;
+
+    public int[] returnSensorData() {
+        return arr;
+
     }
 
-    public int getUniqueId() {
-        return 42;
-    }
 }

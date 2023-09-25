@@ -21,18 +21,13 @@ public class SensorDataTest {
     SensorData databaseMock;
 
 
-    @Test
-    public void testQuery() {
-    }
-
-    @Test
-    void ensureMockitoReturnsTheConfiguredValue() {
-    }
-
-
     @BeforeEach
     public void SetUp() {
 
+    }
+
+    @Test
+    public void testingTheReturnOfTheSensorData() {
     }
 
 
