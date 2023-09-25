@@ -52,12 +52,13 @@ public class AutoParkingCar {
 
     public AutoParkingCar(int[] sens1, int[] sens2, context con, int[] parkP, Actuator actuator) {
         this.con = con;
+        this.actuator = actuator;
         con.position = 0;
         con.situation = false;
         ultraSoundSensorOne = sens1;
         ultraSoundSensorTwo = sens2;
         parkingPlace = parkP;
-        this.actuator = actuator;
+
     }
 
     /**

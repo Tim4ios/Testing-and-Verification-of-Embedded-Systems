@@ -241,7 +241,7 @@ class AutoParkingCarTest {
     @Test
     void isEmptyWithFirstSensorBrokenTest() {
         int[] brokenSensor = {200, 10, 200, 30, 150};
-        AutoParkingCar dummyCar = new AutoParkingCar(dummySens1, brokenSensor, new AutoParkingCar.context(0, false), dummyParkingPlace);
+        AutoParkingCar dummyCar = new AutoParkingCar(dummySens1, brokenSensor, new AutoParkingCar.context(0, false), dummyParkingPlace, act);
 
         int expected_result = 0;
 
@@ -256,7 +256,7 @@ class AutoParkingCarTest {
     @Test
     void isEmptyWithSecondSensorBrokenTest() {
         int[] brokenSensor = {200, 10, 50, 100, 150};
-        AutoParkingCar dummyCar = new AutoParkingCar(brokenSensor, dummySens2, new AutoParkingCar.context(0, false), dummyParkingPlace);
+        AutoParkingCar dummyCar = new AutoParkingCar(brokenSensor, dummySens2, new AutoParkingCar.context(0, false), dummyParkingPlace, act);
 
         int expected_result = 0;
 
@@ -272,7 +272,7 @@ class AutoParkingCarTest {
     void isEmptyWithBothSensorsBrokenTest() {
         int[] brokenSensorOne = {200, 10, 50, 100, 150};
         int[] brokenSensorTwo = {500000, 10, 50, 100, 150};
-        AutoParkingCar dummyCar = new AutoParkingCar(brokenSensorOne, brokenSensorTwo, new AutoParkingCar.context(0, false), dummyParkingPlace);
+        AutoParkingCar dummyCar = new AutoParkingCar(brokenSensorOne, brokenSensorTwo, new AutoParkingCar.context(0, false), dummyParkingPlace, act);
 
         //Faulty return value indicated with length -1
         Assertions.assertEquals(-1, dummyCar.isEmpty());
