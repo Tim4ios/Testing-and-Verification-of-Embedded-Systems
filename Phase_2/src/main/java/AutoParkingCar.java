@@ -1,21 +1,17 @@
-import java.util.Random;
-
-
 public class AutoParkingCar {
     public context con;
-    private int oneMeter = 100;
 
     private Actuator actuator;
-
     private int parkingCounter = 0;
     private boolean parkingSpot = false;
 
-    public static int counter = 0;
+    private SensorData sensorData;
+    static int counter = 0;
     private int[] parkingPlace;
 
-    private int carPos = 0;
-    private int endOfTheStreet = 50000;
-    private int startOfStreet = 0;
+    private final int oneMeter = 100;
+    private final int endOfTheStreet = 50000;
+    private final int startOfStreet = 0;
 
     public static class context {
         private int position;
@@ -51,9 +47,10 @@ public class AutoParkingCar {
     }
 
 
-    public AutoParkingCar(int[] sensorData, context con, Actuator actuator) {
+    public AutoParkingCar(SensorData sd, context con, Actuator actuator) {
         this.con = con;
         this.actuator = actuator;
+        this.sensorData = sd;
         con.position = 0;
         con.situation = false;
     }
@@ -81,7 +78,7 @@ public class AutoParkingCar {
             return con;
         //This makes the car a U-turn and starts at Start of the street again.
         //Solves didTheCarMoveToEndOfStreetAndStartOverFromTheBeginningTest
-        if (con.position >= endOfTheStreet) {
+        if (con.position > endOfTheStreet) {
             counter = 0;
             con.position = startOfStreet;
         }
@@ -274,9 +271,7 @@ public class AutoParkingCar {
             MoveBackwards();
             //This checks so that all the 5 meters parking spot are avaible. So no car has parked over two parkingspots.
             //Also so that the parkingspot is no avabile anymore
-            if (parkingPlace[counter] == 0 && parkingPlace[counter - 1] == 0 && parkingPlace[counter - 2] == 0 &&
-                    parkingPlace[counter - 3] == 0 && parkingPlace[counter - 4] == 0) {
-                parkingSpot = true;
+            if (isEmpty()) {
                 break;
             }
         }
@@ -284,13 +279,11 @@ public class AutoParkingCar {
 
         //We check so that parkingSpot is free and that the all 5 meters are free for parking
         //Solves parkCarTest
-        if (isEmpty() && parkingSpot) {
-            con.situation = true;
-            for (int i = 0; i < 5; i++) {
-                parkingPlace[counter--] = 3;
-            }
-            System.out.println("You parked your car");
+        con.situation = true;
+        for (int i = 0; i < 5; i++) {
+            parkingPlace[counter--] = 3;
         }
+        System.out.println("You parked your car");
         return con;
     }
 
@@ -303,8 +296,9 @@ public class AutoParkingCar {
      * Post-condition: The car should be unparked and moved forward also altering the situation of the car, returning an object with the situation
      * <p>
      * Test-cases:
-     * unParkTest
-     * unParkCarWhenParkedTest
+     * ifCarIsParkedTryToParkAndMoveBackwards
+     * tryToParkBackwardsWhenStartingInEndOfStreet
+     * tryToParkBackwardsWhenStartingInStartOfStreet
      */
     public context UnPark() {
         //If we already are unParked, do nothing

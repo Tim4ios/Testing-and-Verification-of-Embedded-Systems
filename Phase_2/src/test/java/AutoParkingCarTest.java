@@ -5,7 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.OngoingStubbing;
 
 
 import java.util.Arrays;
@@ -17,7 +16,6 @@ class AutoParkingCarTest {
     @Mock
     SensorData mockedSensorData;
     AutoParkingCar car;
-    AutoParkingCar car2;
     private int[] dummyParkingPlace;
     private int[] dummyParkingFirstSpot;
 
@@ -35,16 +33,9 @@ class AutoParkingCarTest {
         // Initialize dummy sensor data and car context for testing.
         mockedSensorData = Mockito.mock(SensorData.class);
 
-        sd = new SensorData();
-        mockParkingSpot = sd.returnSensorData(500);
-
-        dummySens1 = new int[]{200, 190, 180, 195, 185};
-        dummySens2 = new int[]{180, 179, 193, 191, 199};
-        dummyParkingFirstSpot = new int[]{0, 0, 0, 0, 0};
-
         AutoParkingCar.context dummyContext = new AutoParkingCar.context(0, false);
 
-        car = new AutoParkingCar(mockParkingSpot, dummyContext, act);
+        car = new AutoParkingCar(mockedSensorData, dummyContext, act);
 
 
     }
@@ -236,32 +227,34 @@ class AutoParkingCarTest {
      **/
     @Test
     void ifCarIsParkedTryToParkAndMoveBackwards() {
-    }
+        car.con.setPosition(45000);
+        car.con.setSituation(true);
+        car.ParkBackwards();
+        Assertions.assertTrue(car.con.getSituation());
+        Assertions.assertEquals(45000, car.con.getPosition());
 
-    @Test
-    void tryToParkBackWardsWhenStartingInEndOfStreet() {
-    }
-
-    @Test
-    void tryToParkBackWardsWhenStartingInStartOfStreet() {
-    }
-
-    @Test
-    void willeMockitoTest() {
-        when(mockedSensorData.returnSensorData(500)).thenReturn(new int[]{1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80});
 
     }
 
     @Test
-    void isMockingBackwards() {
-        System.out.println(Arrays.toString(mockParkingSpot));
-        car2.con.setPosition(50000);
-        System.out.println(car2.con.getPosition());
-        System.out.println(car2.con.getSituation());
-        car2.ParkBackwards();
-        System.out.println(car2.con.getPosition());
-        System.out.println(car2.con.getSituation());
-        System.out.println(Arrays.toString(mockParkingSpot));
+    void tryToParkBackwardsWhenStartingInEndOfStreet() {
+        car.con.setPosition(45000);
+        car.con.setSituation(false);
+        car.ParkBackwards();
+        int result = car.con.getPosition();
+        Assertions.assertTrue(car.con.getSituation());
+        Assertions.assertEquals(result, car.con.getPosition());
+
+    }
+
+    @Test
+    void tryToParkBackwardsWhenStartingInStartOfStreet() {
+        car.con.setPosition(0);
+        car.con.setSituation(false);
+        car.ParkBackwards();
+        int result = car.con.getPosition();
+        Assertions.assertFalse(car.con.getSituation());
+        Assertions.assertEquals(result, car.con.getPosition());
 
 
     }

@@ -3,13 +3,15 @@ import java.util.Random;
 
 //Hardcoded the
 public class SensorData {
-    boolean flagZero = true;
-    boolean flagOne = true;
-    boolean flagTwo = true;
+    private boolean flagZero = true;
+    private boolean flagOne = true;
+    private boolean flagTwo = true;
 
-    public int[] returnSensorData(int length) {
+    private final int length = 500;
+
+    public int[] returnSensorData() {
         int[] array = new int[length];
-        Random random = new Random();
+        //Random random = new Random();
 
         Arrays.fill(array, 1);
 
@@ -18,7 +20,7 @@ public class SensorData {
         while (currentIndex < length) {
 
             // Generate a random number (0, 240) to decide the group pattern
-            int groupPattern = random.nextInt(249);
+            //int groupPattern = random.nextInt(249);
             int parkOne = 4;
             int parkTwo = 14;
             int parkThree = 24;
