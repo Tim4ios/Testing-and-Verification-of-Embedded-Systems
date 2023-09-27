@@ -3,8 +3,6 @@ import java.util.Random;
 
 public class AutoParkingCar {
     public context con;
-    private int[] ultraSoundSensorOne;
-    private int[] ultraSoundSensorTwo;
     private int oneMeter = 100;
 
     private Actuator actuator;
@@ -15,7 +13,6 @@ public class AutoParkingCar {
     public static int counter = 0;
     private int[] parkingPlace;
 
-    private int[] parkingSpots;
     private int carPos = 0;
     private int endOfTheStreet = 50000;
     private int startOfStreet = 0;
@@ -145,20 +142,16 @@ public class AutoParkingCar {
 
     /**
      * Description:
-     * isEmpty: This method queries the two ultrasound sensors at least 5 times and filters the noise in their results
-     * and returns the distance to the nearest object in the right hand side. If one sensor is detected to continuously
-     * return very noisy output, it should be completely disregarded. You can use averaging or any other statistical
-     * method to filter the noise from the signals received from the ultrasound sensors.
+     * isEmpty: This method queries the sensorData class to get the current status of parking sports as an int[]. If a
+     * big enough space for parking is located inside the array at the given context of the car the function returns
+     * true, otherwise false.
      * <p>
-     * Pre-condition: Sensor data has at least 5 values
+     * Pre-condition: Car has collected data from one lap
      * <p>
-     * Post-condition: the returned distance is inbetween the values 0-200
+     * Post-condition: Returns the actual status next to the car,
+     * false if: not big enough car parking spot, a car parked there or data is out of bound
      * <p>
      * Test-cases:
-     * isEmptyWithTwoWorkingSensorsTest
-     * isEmptyWithFirstSensorBrokenTest
-     * isEmptyWithSecondSensorBrokenTest
-     * isEmptyWithBothSensorsBrokenTest
      */
     public boolean isEmpty() {
         int distance = 0;
@@ -167,8 +160,6 @@ public class AutoParkingCar {
         int[] fiveSensValuesTwo = new int[5];
 
         for (int i = 0; i < 5; i++) {
-            fiveSensValuesOne[i] = ultraSoundSensorOne[context];
-            fiveSensValuesTwo[i] = ultraSoundSensorTwo[context];
             context++;
         }
 
@@ -212,7 +203,6 @@ public class AutoParkingCar {
 
     }
 
-
     /**
      * Description:
      * Park: It moves the car forward to the beginning of the current 5 meter free stretch of parking place, if it is already
@@ -227,6 +217,8 @@ public class AutoParkingCar {
      * parkCarTest
      * parkCarWhenParkedTest
      */
+
+
     public context Park() {
         //If we already are parked, do nothing
         //Solves parkCarWhenParkedTest
