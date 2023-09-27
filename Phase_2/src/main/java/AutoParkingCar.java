@@ -13,6 +13,7 @@ public class AutoParkingCar {
     private final int endOfTheStreet = 50000;
     private final int startOfStreet = 0;
 
+
     public static class context {
         private int position;
         private boolean situation;
@@ -154,7 +155,7 @@ public class AutoParkingCar {
      * parkingSpotTooSmall
      * parkingDataOutOfBound
      */
-    public boolean isEmpty(){
+    public boolean isEmpty()  {
         int[] currentParkingLayout = sensorData.returnSensorData();
         //We want 5 meters minimum to ba able to park, this variable keeps track of how many there is in a row
         int numberOfOneMeterSpaces = 0;
@@ -166,8 +167,8 @@ public class AutoParkingCar {
 
         //Check if there is a parking spot at the current context and 4 slots behind(5 is the minimum to park)
         for (int i = 0; i < 5; i++) {
-            
-            //either the current slot is equal to zero or this set of 5 isn't an available parkingspot
+
+            //either the current slot is equal to zero or this set of 5 isn't an available parking spot
             if (currentParkingLayout[slotNumber] == 0) {
                 numberOfOneMeterSpaces++;
             } else
@@ -195,32 +196,37 @@ public class AutoParkingCar {
      * parkCarWhenParkedTest
      */
     public context Park() {
+        int[] currentParkingLayout = sensorData.returnSensorData();
         //If we already are parked, do nothing
         //Solves parkCarWhenParkedTest
         if (con.situation)
             return con;
-
         //Searching for the next avaible free parking spot.
-        while (true) {
+        while (currentParkingLayout[counter] != 0)
             MoveForward();
-            //This checks so that all the 5 meters parking spot are avaible. So no car has parked over two parkingspots.
-            //Also so that the parkingspot is no avabile anymore
-            if (parkingPlace[counter] == 0 && parkingPlace[counter + 1] == 0 && parkingPlace[counter + 2] == 0 &&
-                    parkingPlace[counter + 3] == 0 && parkingPlace[counter - 4] == 0) {
-                parkingSpot = true;
-                break;
-            }
-        }
 
-        //We check so that parkingSpot is free and that the all 5 meters are free for parking
-        //Solves parkCarTest
-        if (isEmpty() && parkingSpot) {
+        System.out.println("Counter is " + counter);
+        System.out.println("CounterArr is " + currentParkingLayout[counter]);
+        //if (counter == 0)
+        //  break;
+        //This checks so that all the 5 meters parking spot are avaible. So no car has parked over two parkingspots.
+        //Also so that the parkingspot is no avabile anymore
+        if (isEmpty()) {
             con.situation = true;
             for (int i = 0; i < 5; i++) {
-                parkingPlace[counter++] = 3;
+                currentParkingLayout[counter++] = 3;
             }
             System.out.println("You parked your car");
         }
+
+
+        //Solves parkCarTest
+        // Now when we parking the car we have to make it unavaible for the other cars that wants to park.
+
+        //We check so that parkingSpot is free and that the all 5 meters are free for parking
+        //Solves parkCarTest
+
+
         return con;
     }
 
@@ -248,7 +254,7 @@ public class AutoParkingCar {
         // Moving the car backwards untill we finds a empty parking spot.
         while (true) {
             MoveBackwards();
-            if(counter == 0)
+            if (counter == 0)
                 break;
             // Checking isEmpty because of when its true there is a parkingspot free then we stop move backwards
             // and parks the car.
@@ -263,7 +269,6 @@ public class AutoParkingCar {
                 break;
             }
         }
-
 
 
         return con;
@@ -283,6 +288,7 @@ public class AutoParkingCar {
      * tryToParkBackwardsWhenStartingInStartOfStreet
      */
     public context UnPark() {
+        int[] currentParkingLayout = sensorData.returnSensorData();
         //If we already are unParked, do nothing
         //Solves unParkCarWhenParkedTest
         if (!con.situation)
@@ -291,9 +297,11 @@ public class AutoParkingCar {
         //If we unpark the car. we should set the parkingspot to avaible again
         //Solves unParkTest
         con.situation = false;
+        System.out.println("Counter is:" + counter);
         int tempCount = counter;
-        for (int i = 0; i <= 5 && tempCount < parkingPlace.length; i++) {
-            parkingPlace[tempCount] = 0;
+        System.out.println("TC is:" + tempCount);
+        for (int i = 0; i <= 5 && tempCount < currentParkingLayout.length; i++) {
+            currentParkingLayout[tempCount] = 0;
             tempCount--;
 
         }

@@ -65,7 +65,8 @@ class AutoParkingCarTest {
     @Test
     void didCarMoveForwardTest() {
         // Test whether the car can move forward correctly.
-
+        int[] mockData = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        when(mockedSensorData.returnSensorData()).thenReturn(mockData);
         for (int i = 0; i < 6; i++) {
             car.MoveForward();
         }
@@ -79,19 +80,24 @@ class AutoParkingCarTest {
     @Test
     void tryToMoveForwardParkTest() {
         // Try to move forward while the car is parked
+        int[] mockData = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        when(mockedSensorData.returnSensorData()).thenReturn(mockData);
         car.Park();
         int resultPosition = car.con.getPosition();
         car.MoveForward();
-        Assertions.assertEquals(resultPosition, car.con.getPosition());
+        Assertions.assertEquals(car.con.getPosition(),resultPosition);
     }
 
     @Test
     void didTheCarMoveToEndOfStreetAndStartOverFromTheBeginningTest() {
         // Set the car's position to the end of the street.
+        int[] mockData = mockedSensorData.returnSensorData();
+        when(mockedSensorData.returnSensorData()).thenReturn(mockData);
+        System.out.println(Arrays.toString(mockData));
+
         car.con.setPosition(50000);
         // Assert that the car's position is set correctly to the end of the street.
         Assertions.assertEquals(50000, car.con.getPosition());
-
 
         // Move the car forward, which should wrap it around to the beginning of the street.
         car.MoveForward();
@@ -105,6 +111,8 @@ class AutoParkingCarTest {
     @Test
     void didCarMoveBackwardsTest() {
         // Test whether the car can move backward correctly.
+        int[] mockData = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        when(mockedSensorData.returnSensorData()).thenReturn(mockData);
         int pos5 = 500;
         for (int i = 0; i < 6; i++) {
             car.MoveForward();
@@ -122,6 +130,8 @@ class AutoParkingCarTest {
     @Test
     void tryToMoveBackwardsWhileParkedTest() {
         // Try to move backward while the car is parked
+        int[] mockData = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        when(mockedSensorData.returnSensorData()).thenReturn(mockData);
         car.Park();
         int resultPosition = car.con.getPosition();
         car.MoveBackwards();
@@ -142,9 +152,13 @@ class AutoParkingCarTest {
     @Test
     void parkCarTest() {
         //unpark car in case it is parked
+        int[] mockData = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        when(mockedSensorData.returnSensorData()).thenReturn(mockData);
+        car.con.setSituation(false);
         car.UnPark();
         car.Park();
         Assertions.assertTrue(car.con.getSituation());
+        System.out.println(car.WhereIs().getSituation());
     }
 
     @Test
@@ -161,6 +175,8 @@ class AutoParkingCarTest {
     @Test
     void unParkTest() {
         // Test if the car can be unparked.
+        int[] mockData = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        when(mockedSensorData.returnSensorData()).thenReturn(mockData);
         car.MoveForward();
         car.MoveForward();
         car.MoveForward();
@@ -249,7 +265,9 @@ class AutoParkingCarTest {
 
     @Test
     void tryToParkBackwardsWhenStartingInEndOfStreet() {
-        car.con.setPosition(45000);
+        int[] mockData = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        when(mockedSensorData.returnSensorData()).thenReturn(mockData);
+        car.con.setPosition(1000);
         car.con.setSituation(false);
         car.ParkBackwards();
         int result = car.con.getPosition();
