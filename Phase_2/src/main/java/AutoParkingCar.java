@@ -149,55 +149,32 @@ public class AutoParkingCar {
      * false if: not big enough car parking spot, a car parked there or data is out of bound
      * <p>
      * Test-cases:
+     * parkingSpotAvailable()
+     * parkingSpotOccupied()
+     * parkingSpotTooSmall()
+     * parkingDataOutOfBound()
      */
     public boolean isEmpty() {
-        int distance = 0;
-        int context = carPos / 100;
-        int[] fiveSensValuesOne = new int[5];
-        int[] fiveSensValuesTwo = new int[5];
+        int[] currentParkingLayout = sensorData.returnSensorData();
+        int numberOfOneMeterSpaces = 0;
+        int slotNumber = con.getPosition() / 100;
 
+        //Not enough place to park at start of road regardless
+        if (slotNumber < 4) return false;
+
+        //Check if there is a parking spot at the current context and 4 slots behind(5 is the minimum to park)
         for (int i = 0; i < 5; i++) {
-            context++;
-        }
 
-        //First sensor is noisy, satisfies isEmptyWithFirstSensorBrokenTest
-        if (true) {
+            if (currentParkingLayout[slotNumber] == 0) {
+                numberOfOneMeterSpaces++;
+            } else
+                return false;
 
-            //Both sensors are noisy/broken, satisfies isEmptyWithBothSensorsBrokenTest
-            if (true) {
-
-                return true;
-                //Second sensor is working
-            } else {
-
-                for (int value : fiveSensValuesTwo) {
-                    distance += value;
-                }
-                return true;
-            }
+            slotNumber--;
 
         }
 
-        //second sensor is noisy and first one is not, , satisfies isEmptyWithSecondSensorBrokenTest
-        if (true) {
-
-            for (int value : fiveSensValuesOne) {
-                distance += value;
-            }
-            return true;
-        }
-
-
-        // Both sensors are reliable, handle this case accordingly, satisfies isEmptyWithTwoWorkingSensorsTest
-        for (int value : fiveSensValuesOne) {
-            distance += value;
-        }
-        for (int value : fiveSensValuesTwo) {
-            distance += value;
-        }
         return true;
-
-
     }
 
     /**
