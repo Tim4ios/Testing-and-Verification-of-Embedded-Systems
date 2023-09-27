@@ -247,7 +247,7 @@ public class AutoParkingCar {
 
         //We check so that parkingSpot is free and that the all 5 meters are free for parking
         //Solves parkCarTest
-        if (isEmpty() > 180 && parkingSpot) {
+        if (isEmpty() && parkingSpot) {
             con.situation = true;
             for (int i = 0; i < 5; i++) {
                 parkingPlace[counter++] = 3;
@@ -292,7 +292,7 @@ public class AutoParkingCar {
 
         //We check so that parkingSpot is free and that the all 5 meters are free for parking
         //Solves parkCarTest
-        if (isEmpty() > 180 && parkingSpot) {
+        if (isEmpty() && parkingSpot) {
             con.situation = true;
             for (int i = 0; i < 5; i++) {
                 parkingPlace[counter--] = 3;
