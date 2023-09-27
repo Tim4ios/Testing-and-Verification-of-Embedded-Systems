@@ -270,4 +270,17 @@ class AutoParkingCarTest {
 
     }
 
+    @Test
+    void ParkBackwardsIfNoAvailableParkingSpots()
+    {
+        car.con.setPosition(1000);
+        car.con.setSituation(false);
+        int[] mockData = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+        when(mockedSensorData.returnSensorData()).thenReturn(mockData);
+        car.ParkBackwards();
+
+
+
+    }
+
 }

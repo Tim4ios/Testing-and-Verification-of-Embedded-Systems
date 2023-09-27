@@ -149,10 +149,10 @@ public class AutoParkingCar {
      * false if: not big enough car parking spot, a car parked there or data is out of bound
      * <p>
      * Test-cases:
-     * parkingSpotAvailable()
-     * parkingSpotOccupied()
-     * parkingSpotTooSmall()
-     * parkingDataOutOfBound()
+     * parkingSpotAvailable
+     * parkingSpotOccupied
+     * parkingSpotTooSmall
+     * parkingDataOutOfBound
      */
     public boolean isEmpty(){
         int[] currentParkingLayout = sensorData.returnSensorData();
@@ -239,29 +239,33 @@ public class AutoParkingCar {
      * parkCarWhenParkedTest
      */
     public context ParkBackwards() {
+        int[] currentParkingLayout = sensorData.returnSensorData();
         //If we already are parked, do nothing
         //Solves parkCarWhenParkedTest
         if (con.situation)
             return con;
 
-        //Searching for the next avaible free parking spot.
+        // Moving the car backwards untill we finds a empty parking spot.
         while (true) {
             MoveBackwards();
-            //This checks so that all the 5 meters parking spot are avaible. So no car has parked over two parkingspots.
-            //Also so that the parkingspot is no avabile anymore
+            if(counter == 0)
+                break;
+            // Checking isEmpty because of when its true there is a parkingspot free then we stop move backwards
+            // and parks the car.
             if (isEmpty()) {
+                //Solves parkCarTest
+                // Now when we parking the car we have to make it unavaible for the other cars that wants to park.
+                con.situation = true;
+                for (int i = 0; i < 5; i++) {
+                    currentParkingLayout[counter--] = 3;
+                }
+                System.out.println("You parked your car");
                 break;
             }
         }
 
 
-        //We check so that parkingSpot is free and that the all 5 meters are free for parking
-        //Solves parkCarTest
-        con.situation = true;
-        for (int i = 0; i < 5; i++) {
-            parkingPlace[counter--] = 3;
-        }
-        System.out.println("You parked your car");
+
         return con;
     }
 
