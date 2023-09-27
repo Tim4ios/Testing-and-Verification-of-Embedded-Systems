@@ -17,7 +17,7 @@ public class SensorData {
         while (currentIndex < length) {
 
             // Generate a random number (0, 240) to decide the group pattern
-            int groupPattern = random.nextInt(240);
+            int groupPattern = random.nextInt(249);
 
             if (flagZero && currentIndex < 250) {
                 // Fill the current group with "0,0,0,0,"

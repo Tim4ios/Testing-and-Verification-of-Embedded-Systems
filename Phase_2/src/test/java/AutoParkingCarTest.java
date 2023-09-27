@@ -1,6 +1,9 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.util.Arrays;
 
 class AutoParkingCarTest {
     AutoParkingCar car;
@@ -11,6 +14,8 @@ class AutoParkingCarTest {
     private int[] dummySens1;
     private int[] dummySens2;
 
+    private int [] mockParkingSpot;
+    private SensorData sd;
     Actuator act;
 
     @BeforeEach
@@ -19,6 +24,10 @@ class AutoParkingCarTest {
     void setupCars() {
         // Initialize dummy sensor data and car context for testing.
 
+        sd = new SensorData();
+        mockParkingSpot = sd.returnSensorData(500);
+
+
         dummySens1 = new int[]{200, 190, 180, 195, 185};
         dummySens2 = new int[]{180, 179, 193, 191, 199};
         dummyParkingFirstSpot = new int[]{0, 0, 0, 0, 0};
@@ -26,8 +35,9 @@ class AutoParkingCarTest {
         dummyParkingPlace = AutoParkingCar.generateRandomParking(500, 5);
         AutoParkingCar.context dummyContext = new AutoParkingCar.context(0, false);
 
+
         car = new AutoParkingCar(dummySens1, dummySens2, dummyContext, dummyParkingPlace, act);
-        car2 = new AutoParkingCar(dummySens1, dummySens2, dummyContext, dummyParkingFirstSpot, act);
+        car2 = new AutoParkingCar(dummySens1, dummySens2, dummyContext, mockParkingSpot, act);
 
 
     }
@@ -276,6 +286,21 @@ class AutoParkingCarTest {
 
         //Faulty return value indicated with length -1
         Assertions.assertEquals(-1, dummyCar.isEmpty());
+    }
+
+    @Test
+    void isMockingBackwards()
+    {
+        //System.out.println(Arrays.toString(mockParkingSpot));
+        car2.con.setPosition(49900);
+        System.out.println(car2.con.getPosition());
+        System.out.println(car2.con.getSituation());
+        car2.ParkBackwards();
+        System.out.println(car2.con.getPosition());
+        System.out.println(car2.con.getSituation());
+        //System.out.println(Arrays.toString(mockParkingSpot));
+
+
     }
 
 }

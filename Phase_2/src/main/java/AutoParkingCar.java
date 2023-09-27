@@ -12,7 +12,7 @@ public class AutoParkingCar {
     private int parkingCounter = 0;
     private boolean parkingSpot = false;
 
-    public int counter = 0;
+    public static int counter = 0;
     private int[] parkingPlace;
 
     private int[] parkingSpots;
@@ -32,7 +32,14 @@ public class AutoParkingCar {
         public void setPosition(int position) {
             if (position < 0 || position > 50000)
                 position = 0;
+            //Has to update the counter if we want to set the car to start for example in the end of the street.
+            if(position == 0) {
+                counter = 0;
+            }
+            counter = position/100;
+
             this.position = position;
+
         }
 
 
@@ -160,17 +167,16 @@ public class AutoParkingCar {
         if (con.situation)
             return con;
 
-        //we update the current position.
-        //Solves didCarMoveBackwardsTest
-        con.position = con.position - oneMeter;
-
         //If we are at the start of the street and move backwards, we just start over from start. cannot back to negative values
         //Solves shouldNotMoveBackwardsIfAtStartTest
         if (con.position <= startOfStreet) {
             con.position = 0;
+        } else {
+            //we update the current position.
+            //Solves didCarMoveBackwardsTest
+            con.position = con.position - oneMeter;
+            counter--;
         }
-
-        counter--;
         return con;
     }
 
@@ -306,14 +312,49 @@ public class AutoParkingCar {
             return con;
 
         //Searching for the next avaible free parking spot.
-        while (parkingPlace[counter] != 0)
+        while (true) {
             MoveForward();
-        //This checks so that all the 5 meters parking spot are avaible. So no car has parked over two parkingspots.
-        //Also so that the parkingspot is no avabile anymore
-        if (parkingPlace[counter] == 0 && parkingPlace[counter + 1] == 0 && parkingPlace[counter + 2] == 0 &&
-                parkingPlace[counter + 3] == 0 && parkingPlace[counter + 4] == 0) {
-            parkingSpot = true;
+            //This checks so that all the 5 meters parking spot are avaible. So no car has parked over two parkingspots.
+            //Also so that the parkingspot is no avabile anymore
+            if (parkingPlace[counter] == 0 && parkingPlace[counter - 1] == 0 && parkingPlace[counter - 2] == 0 &&
+                    parkingPlace[counter - 3] == 0 && parkingPlace[counter - 4] == 0) {
+                parkingSpot = true;
+                break;
+            }
         }
+
+
+        //We check so that parkingSpot is free and that the all 5 meters are free for parking
+        //Solves parkCarTest
+        if (isEmpty() > 180 && parkingSpot) {
+            con.situation = true;
+            for (int i = 0; i < 5; i++) {
+                parkingPlace[counter++] = 3;
+            }
+            System.out.println("You parked your car");
+        }
+        return con;
+    }
+
+    public context ParkBackwards() {
+        //If we already are parked, do nothing
+        //Solves parkCarWhenParkedTest
+        if (con.situation)
+            return con;
+
+        //Searching for the next avaible free parking spot.
+        while (true) {
+            MoveBackwards();
+            //This checks so that all the 5 meters parking spot are avaible. So no car has parked over two parkingspots.
+            //Also so that the parkingspot is no avabile anymore
+            if (parkingPlace[counter] == 0 && parkingPlace[counter - 1] == 0 && parkingPlace[counter - 2] == 0 &&
+                    parkingPlace[counter - 3] == 0 && parkingPlace[counter - 4] == 0) {
+                parkingSpot = true;
+                break;
+            }
+        }
+
+
         //We check so that parkingSpot is free and that the all 5 meters are free for parking
         //Solves parkCarTest
         if (isEmpty() > 180 && parkingSpot) {

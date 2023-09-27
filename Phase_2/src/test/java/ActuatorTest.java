@@ -19,6 +19,7 @@ public class ActuatorTest {
         // Create a mock actuator
         Actuator mockActuator = Mockito.mock(Actuator.class);
 
+
         dummySens1 = new int[]{200, 190, 180, 195, 185};
         dummySens2 = new int[]{180, 179, 193, 191, 199};
         dummyParkingFirstSpot = new int[]{0, 0, 0, 0, 0};
