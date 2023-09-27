@@ -17,8 +17,8 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class SensorDataTest {
-    //@Mock
-    //SensorData sensorDataMock;
+    @Mock
+    SensorData sensorDataMock;
 
 
     @BeforeEach
@@ -28,7 +28,8 @@ public class SensorDataTest {
 
     @Test
     public void testingTheReturnOfTheSensorData() {
-        SensorData sensorDataMock = Mockito.mock(SensorData.class);
+        sensorDataMock.returnSensorData(500);
+
         SensorData sd = new SensorData();
         sensorDataMock.returnSensorData(500);
 

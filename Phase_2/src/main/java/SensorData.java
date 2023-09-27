@@ -1,6 +1,7 @@
 import java.util.Arrays;
 import java.util.Random;
 
+//Hardcoded the
 public class SensorData {
     boolean flagZero = true;
     boolean flagOne = true;
@@ -18,11 +19,14 @@ public class SensorData {
 
             // Generate a random number (0, 240) to decide the group pattern
             int groupPattern = random.nextInt(249);
+            int parkOne = 4;
+            int parkTwo = 14;
+            int parkThree = 24;
 
             if (flagZero && currentIndex < 250) {
                 // Fill the current group with "0,0,0,0,"
-                for (int i = groupPattern; i < groupPattern + 4; i++) {
-                    if (i < groupPattern + 4) {
+                for (int i = parkOne; i < parkOne + 4; i++) {
+                    if (i < parkOne + 4) {
                         array[i] = 0;
                     } else break;
 
@@ -31,8 +35,8 @@ public class SensorData {
 
             } else if (flagOne && currentIndex < 250) {
                 // Fill the current group with "0,0,0,0,0,"
-                for (int i = groupPattern; i < groupPattern + 5; i++) {
-                    if (i < groupPattern + 5) {
+                for (int i = parkTwo; i < parkTwo + 5; i++) {
+                    if (i < parkTwo + 5) {
                         array[i] = 0;
                     } else {
 
@@ -43,8 +47,8 @@ public class SensorData {
 
             } else if (flagTwo && currentIndex < 250) {
                 // Fill the current group with "0,0,0,0,0,0,"
-                for (int i = groupPattern; i < groupPattern + 6; i++) {
-                    if (i < groupPattern + 6) {
+                for (int i = parkThree; i < parkThree + 6; i++) {
+                    if (i < parkThree + 6) {
                         array[i] = 0;
                     } else {
                         break;
