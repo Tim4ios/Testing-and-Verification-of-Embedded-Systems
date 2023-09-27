@@ -356,7 +356,7 @@ public class AutoParkingCar {
         if (isEmpty() > 180 && parkingSpot) {
             con.situation = true;
             for (int i = 0; i < 5; i++) {
-                parkingPlace[counter++] = 3;
+                parkingPlace[counter--] = 3;
             }
             System.out.println("You parked your car");
         }
