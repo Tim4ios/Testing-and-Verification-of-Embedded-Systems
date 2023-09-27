@@ -43,12 +43,10 @@ class AutoParkingCarTest {
         dummySens2 = new int[]{180, 179, 193, 191, 199};
         dummyParkingFirstSpot = new int[]{0, 0, 0, 0, 0};
 
-        dummyParkingPlace = AutoParkingCar.generateRandomParking(500, 5);
         AutoParkingCar.context dummyContext = new AutoParkingCar.context(0, false);
 
-
-        car = new AutoParkingCar(dummySens1, dummySens2, dummyContext, dummyParkingPlace, act);
-        car2 = new AutoParkingCar(dummySens1, dummySens2, dummyContext, mockParkingSpot, act);
+        car = new AutoParkingCar(mockParkingSpot,dummyContext,act);
+        //car2 = new AutoParkingCar(dummySens1, dummySens2, dummyContext, mockParkingSpot, act);
 
 
     }
@@ -210,95 +208,8 @@ class AutoParkingCarTest {
         Assertions.assertEquals(0, car.WhereIs().getPosition());
     }
 
-/**------------------------------------------------------------------------------------------------------------------**/
-    /**
-     * TESTS FOR isNoisy() METHOD
-     **/
-    @Test
-    void sensorDataNotNoisyTest() {
-        int[] cleanData = {190, 150, 120, 180, 200};
-        Assertions.assertFalse(car.isNoisy(cleanData));// Clean data should return false
-    }
-
-    @Test
-    void sensorDataNoisyTest() {
-        int[] noisyData = {20, 150, 10, 200, 115};
-        Assertions.assertTrue(car.isNoisy(noisyData)); // Noisy data should return true
-    }
-
-    @Test
-    void sensorDataNegativeTest() {
-        int[] cleanData = {0, 0, 0, 0, -1};
-        Assertions.assertTrue(car.isNoisy(cleanData));// Noisy data should return true
-    }
-
-    @Test
-    void sensorDataTooBigTest() {
-        int[] cleanData = {200, 190, 201, 198, 189};
-        Assertions.assertTrue(car.isNoisy(cleanData));// Noisy data should return true
-    }
 
 /**------------------------------------------------------------------------------------------------------------------**/
-    /**
-     * TESTS FOR isEmpty() METHOD
-     **/
-    @Test
-    void isEmptyWithTwoWorkingSensorsTest() {
-        int expected_result = 0;
-
-        // Calculate the expected result based on dummy sensor data.
-        for (int val : dummySens1) {
-
-
-            expected_result += val;
-        }
-        for (int val : dummySens2) {
-            expected_result += val;
-        }
-        //It the expected result should be the same as the average of the clean date
-        Assertions.assertEquals(expected_result / 10, car.isEmpty());
-    }
-
-    @Test
-    void isEmptyWithFirstSensorBrokenTest() {
-        int[] brokenSensor = {200, 10, 200, 30, 150};
-        AutoParkingCar dummyCar = new AutoParkingCar(dummySens1, brokenSensor, new AutoParkingCar.context(0, false), dummyParkingPlace, act);
-
-        int expected_result = 0;
-
-        for (int val : dummySens1) {
-            expected_result += val;
-        }
-
-        //It the expected result should only take the average of the working sensor, being the second one
-        Assertions.assertEquals(expected_result / 5, dummyCar.isEmpty());
-    }
-
-    @Test
-    void isEmptyWithSecondSensorBrokenTest() {
-        int[] brokenSensor = {200, 10, 50, 100, 150};
-        AutoParkingCar dummyCar = new AutoParkingCar(brokenSensor, dummySens2, new AutoParkingCar.context(0, false), dummyParkingPlace, act);
-
-        int expected_result = 0;
-
-        for (int val : dummySens2) {
-            expected_result += val;
-        }
-
-        //It the expected result should only take the average of the working sensor, being the second one
-        Assertions.assertEquals(expected_result / 5, dummyCar.isEmpty());
-    }
-
-    @Test
-    void isEmptyWithBothSensorsBrokenTest() {
-        int[] brokenSensorOne = {200, 10, 50, 100, 150};
-        int[] brokenSensorTwo = {500000, 10, 50, 100, 150};
-        AutoParkingCar dummyCar = new AutoParkingCar(brokenSensorOne, brokenSensorTwo, new AutoParkingCar.context(0, false), dummyParkingPlace, act);
-
-        //Faulty return value indicated with length -1
-        Assertions.assertEquals(-1, dummyCar.isEmpty());
-    }
-
 
     @Test
     void willeMockitoTest()

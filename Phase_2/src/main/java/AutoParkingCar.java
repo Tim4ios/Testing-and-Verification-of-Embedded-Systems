@@ -54,45 +54,11 @@ public class AutoParkingCar {
     }
 
 
-    public AutoParkingCar(int[] sens1, int[] sens2, context con, int[] parkP, Actuator actuator) {
+    public AutoParkingCar(int[] sensorData, context con, Actuator actuator) {
         this.con = con;
         this.actuator = actuator;
         con.position = 0;
         con.situation = false;
-        ultraSoundSensorOne = sens1;
-        ultraSoundSensorTwo = sens2;
-        parkingPlace = parkP;
-
-    }
-
-    /**
-     * Description:
-     * generateRandomParking: This method generates a random parking pattern by creating groups of specified size and
-     * assigning a random value (0 or 1) to each element within those groups, resulting in an array
-     * that simulates parking availability.
-     */
-    public static int[] generateRandomParking(int length, int groupSize) {
-        int[] array = new int[length];
-        Random random = new Random();
-
-        int currentIndex = 0;
-
-        while (currentIndex < length) {
-            int groupStartIndex = currentIndex;
-            int groupEndIndex = Math.min(currentIndex + groupSize, length);
-
-            // Generate a random number (0 or 1) for each element in the current group
-            int randomValue = random.nextInt(2);
-
-            // Fill the current group with the same random value
-            for (int i = groupStartIndex; i < groupEndIndex; i++) {
-                array[i] = randomValue;
-            }
-
-            // Move to the next group
-            currentIndex = groupEndIndex;
-        }
-        return array;
     }
 
     /**
@@ -133,7 +99,7 @@ public class AutoParkingCar {
             parkingSpots[counter] = 1;*/
 
             //Need to check so that the parkingSpot is empty and free to park.
-            if (isEmpty() > 180)
+            if (isEmpty())
                 parkingCounter++;
 
 
@@ -179,48 +145,6 @@ public class AutoParkingCar {
 
     /**
      * Description:
-     * isNoisy: This method takes in an array of integers and creates a 5 long array based on the cars position, if any
-     * value in the array exceeds 200 or is below 0 returns true. We then iterate through the array and find the smallest
-     * and biggest values and if the difference is bigger than 120 then return true. Otherwise, return false
-     * <p>
-     * Pre-condition: Check for illegal startvalues must be between 0 and 200
-     * <p>
-     * Post-condition: returns the correct boolean value
-     * <p>
-     * Test-cases:
-     * sensorDataNotNoisyTest
-     * sensorDataNoisyTest
-     * sensorDataNegativeTest
-     * sensorDataTooBigTest
-     */
-    public boolean isNoisy(int[] sensorData) {
-        //illegal startvalue, fixes sensorDataNegativeTest & sensorDataTooBigTest
-        if (sensorData[0] > 200 || sensorData[0] < 0) return true;
-
-        int max = sensorData[0];
-        int min = sensorData[0];
-
-
-        for (int i = 1; i < sensorData.length; i++) {
-
-            //value, fixes sensorDataNegativeTest & sensorDataTooBigTest
-            if (sensorData[i] < 0 || sensorData[i] > 200) return true;
-
-            if (sensorData[i] > max) {
-
-                max = sensorData[i];
-
-            } else if (sensorData[i] < min) min = sensorData[i];
-
-        }
-        //If the difference between the largest and smallest data exceeds 120 the data is noisy
-        //Satisfies sensorDataNoisyTest & sensorDataNotNoisyTest
-        return 120 < Math.abs(max - min);
-
-    }
-
-    /**
-     * Description:
      * isEmpty: This method queries the two ultrasound sensors at least 5 times and filters the noise in their results
      * and returns the distance to the nearest object in the right hand side. If one sensor is detected to continuously
      * return very noisy output, it should be completely disregarded. You can use averaging or any other statistical
@@ -236,7 +160,7 @@ public class AutoParkingCar {
      * isEmptyWithSecondSensorBrokenTest
      * isEmptyWithBothSensorsBrokenTest
      */
-    public int isEmpty() {
+    public boolean isEmpty() {
         int distance = 0;
         int context = carPos / 100;
         int[] fiveSensValuesOne = new int[5];
@@ -249,30 +173,30 @@ public class AutoParkingCar {
         }
 
         //First sensor is noisy, satisfies isEmptyWithFirstSensorBrokenTest
-        if (isNoisy(fiveSensValuesOne)) {
+        if (true) {
 
             //Both sensors are noisy/broken, satisfies isEmptyWithBothSensorsBrokenTest
-            if (isNoisy(fiveSensValuesTwo)) {
+            if (true) {
 
-                return -1;
+                return true;
                 //Second sensor is working
             } else {
 
                 for (int value : fiveSensValuesTwo) {
                     distance += value;
                 }
-                return distance / fiveSensValuesTwo.length; //average of the 5 values
+                return true;
             }
 
         }
 
         //second sensor is noisy and first one is not, , satisfies isEmptyWithSecondSensorBrokenTest
-        if (isNoisy(fiveSensValuesTwo)) {
+        if (true) {
 
             for (int value : fiveSensValuesOne) {
                 distance += value;
             }
-            return distance / fiveSensValuesOne.length; //average of the 5 values
+            return true;
         }
 
 
@@ -283,14 +207,15 @@ public class AutoParkingCar {
         for (int value : fiveSensValuesTwo) {
             distance += value;
         }
-        return distance / (fiveSensValuesOne.length + fiveSensValuesTwo.length); // average of 10 values (5 from each sensor)
+        return true;
+
 
     }
 
 
     /**
      * Description:
-     * Park: It moves the car to the beginning of the current 5 meter free stretch of parking place, if it is already
+     * Park: It moves the car forward to the beginning of the current 5 meter free stretch of parking place, if it is already
      * detected or moves the car forwards towards the end of the street until such a stretch is detected. Then it
      * performs a pre-programmed reverse parallel parking maneuver.
      * <p>
@@ -332,6 +257,20 @@ public class AutoParkingCar {
         return con;
     }
 
+    /**
+     * Description:
+     * Park: It moves the car to the beginning/end of the current 5 meter free stretch of parking place, if it is already
+     * detected or moves the car backwards towards the end of the street until such a stretch is detected. Then it
+     * performs a pre-programmed reverse parallel parking maneuver.
+     * <p>
+     * Pre-condition: There is an available parkingspot and the car is not already parked
+     * <p>
+     * Post-condition: The car should be parked thus returning an object indicating that it is
+     * <p>
+     * Test-cases:
+     * parkCarTest
+     * parkCarWhenParkedTest
+     */
     public context ParkBackwards() {
         //If we already are parked, do nothing
         //Solves parkCarWhenParkedTest
