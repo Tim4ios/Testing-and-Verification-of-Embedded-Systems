@@ -33,15 +33,12 @@ public class AutoParkingCar {
             if (position < 0 || position > 50000)
                 position = 0;
             //Has to update the counter if we want to set the car to start for example in the end of the street.
-            if(position == 0) {
-                counter = 0;
-            }
-            counter = position/100;
+
+            counter = position / 100;
 
             this.position = position;
 
         }
-
 
         public int getPosition() {
             return position;
@@ -316,13 +313,12 @@ public class AutoParkingCar {
             MoveForward();
             //This checks so that all the 5 meters parking spot are avaible. So no car has parked over two parkingspots.
             //Also so that the parkingspot is no avabile anymore
-            if (parkingPlace[counter] == 0 && parkingPlace[counter - 1] == 0 && parkingPlace[counter - 2] == 0 &&
-                    parkingPlace[counter - 3] == 0 && parkingPlace[counter - 4] == 0) {
+            if (parkingPlace[counter] == 0 && parkingPlace[counter + 1] == 0 && parkingPlace[counter + 2] == 0 &&
+                    parkingPlace[counter + 3] == 0 && parkingPlace[counter - 4] == 0) {
                 parkingSpot = true;
                 break;
             }
         }
-
 
         //We check so that parkingSpot is free and that the all 5 meters are free for parking
         //Solves parkCarTest

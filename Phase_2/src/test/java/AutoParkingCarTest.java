@@ -292,7 +292,7 @@ class AutoParkingCarTest {
     void isMockingBackwards()
     {
         //System.out.println(Arrays.toString(mockParkingSpot));
-        car2.con.setPosition(49900);
+        car2.con.setPosition(50000);
         System.out.println(car2.con.getPosition());
         System.out.println(car2.con.getSituation());
         car2.ParkBackwards();
