@@ -154,9 +154,11 @@ public class AutoParkingCar {
      * parkingSpotTooSmall()
      * parkingDataOutOfBound()
      */
-    public boolean isEmpty() {
+    public boolean isEmpty(){
         int[] currentParkingLayout = sensorData.returnSensorData();
+        //We want 5 meters minimum to ba able to park, this variable keeps track of how many there is in a row
         int numberOfOneMeterSpaces = 0;
+        //index of where our car is in relation to the int[]
         int slotNumber = con.getPosition() / 100;
 
         //Not enough place to park at start of road regardless
@@ -164,7 +166,8 @@ public class AutoParkingCar {
 
         //Check if there is a parking spot at the current context and 4 slots behind(5 is the minimum to park)
         for (int i = 0; i < 5; i++) {
-
+            
+            //either the current slot is equal to zero or this set of 5 isn't an available parkingspot
             if (currentParkingLayout[slotNumber] == 0) {
                 numberOfOneMeterSpaces++;
             } else
@@ -191,8 +194,6 @@ public class AutoParkingCar {
      * parkCarTest
      * parkCarWhenParkedTest
      */
-
-
     public context Park() {
         //If we already are parked, do nothing
         //Solves parkCarWhenParkedTest

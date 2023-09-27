@@ -201,8 +201,7 @@ class AutoParkingCarTest {
      * TESTS FOR isEmpty() METHOD
      **/
     @Test
-    void parkingSpotAvailable() {
-        SensorData mockSensor = Mockito.mock(SensorData.class);
+    void parkingSpotAvailableTest() {
         car.con.setPosition(400);
         int[] mockData = {0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
         when(mockedSensorData.returnSensorData()).thenReturn(mockData);
@@ -210,8 +209,7 @@ class AutoParkingCarTest {
     }
 
     @Test
-    void parkingSpotOccupied() {
-        SensorData mockSensor = Mockito.mock(SensorData.class);
+    void parkingSpotOccupiedTest() {
         car.con.setPosition(400);
         int[] mockData = {1, 1, 1, 1, 1, 0, 0, 0, 0, 0};
         when(mockedSensorData.returnSensorData()).thenReturn(mockData);
@@ -219,16 +217,20 @@ class AutoParkingCarTest {
     }
 
     @Test
-    void parkingSpotTooSmall() {
-        SensorData mockSensor = Mockito.mock(SensorData.class);
+    void parkingSpotTooSmallTest() {
         car.con.setPosition(400);
-        int[] mockData = {0, 1, 1, 1, 1, 0, 0, 0, 0, 0};
+        int[] mockData = {1, 0, 0, 0, 0, 1, 1, 1, 1, 1};
         when(mockedSensorData.returnSensorData()).thenReturn(mockData);
         Assertions.assertFalse(car.isEmpty());
     }
 
     @Test
-    void parkingDataOutOfBound() {
+    void parkingDataOutOfBoundTest() {
+        SensorData mockSensor = Mockito.mock(SensorData.class);
+        car.con.setPosition(400);
+        int[] mockData = {80, 1231111, -999999, 1231231, 91231, 0, 0, 1, 0, 0};
+        when(mockedSensorData.returnSensorData()).thenReturn(mockData);
+        Assertions.assertFalse(car.isEmpty());
     }
 /**------------------------------------------------------------------------------------------------------------------**/
     /**
