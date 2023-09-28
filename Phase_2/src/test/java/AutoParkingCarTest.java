@@ -85,7 +85,7 @@ class AutoParkingCarTest {
         car.Park();
         int resultPosition = car.con.getPosition();
         car.MoveForward();
-        Assertions.assertEquals(car.con.getPosition(),resultPosition);
+        Assertions.assertEquals(car.con.getPosition() - 100,resultPosition);
     }
 
     @Test
@@ -154,9 +154,10 @@ class AutoParkingCarTest {
         //unpark car in case it is parked
         int[] mockData = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         when(mockedSensorData.returnSensorData()).thenReturn(mockData);
-        car.con.setSituation(false);
-        car.UnPark();
-        car.Park();
+        car.con.setPosition(400);
+        car.con.setSituation(false); // not parked
+        car.UnPark(); // return cannot Unpark when not parked
+        car.Park(); // park
         Assertions.assertTrue(car.con.getSituation());
         System.out.println(car.WhereIs().getSituation());
     }

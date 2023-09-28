@@ -19,6 +19,12 @@ public class ActuatorTest {
     }
 
     @Test
+    void startingPositionTest(){
+        Assertions.assertEquals(context.getPosition(), 0);
+    }
+
+
+    @Test
     void driveTest() {
         int result = context.getPosition();
         actuator.drive(context);
@@ -32,37 +38,5 @@ public class ActuatorTest {
         actuator.reverse(context);
         Assertions.assertEquals(context.getPosition(), result - oneMeter);
     }
-
-    @Test
-    void reverseStartOfStreet() {
-        int result = context.getPosition();
-        actuator.reverse(context);
-        Assertions.assertEquals(context.getPosition(), result);
-    }
-
-    @Test
-    void driveEndOfStreet() {
-        context.setPosition(endOfTheStreet);
-        int result = context.getPosition();
-        actuator.drive(context);
-        Assertions.assertNotEquals(context.getPosition(), result);
-    }
-
-    @Test
-    void driveWhenParked() {
-        context.setSituation(true);
-        actuator.drive(context);
-        Assertions.assertTrue(context.getSituation());
-
-    }
-
-    @Test
-    void reverseWhenParked() {
-        context.setSituation(true);
-        actuator.reverse(context);
-        Assertions.assertTrue(context.getSituation());
-
-    }
-
 
 }

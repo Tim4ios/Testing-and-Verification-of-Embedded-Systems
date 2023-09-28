@@ -50,7 +50,7 @@ public class AutoParkingCar {
 
     public AutoParkingCar(SensorData sd, context con, Actuator actuator) {
         this.con = con;
-        this.actuator = actuator;
+        this.actuator = new Actuator();
         this.sensorData = sd;
         con.position = 0;
         con.situation = false;
@@ -86,7 +86,7 @@ public class AutoParkingCar {
         //Else we update the current position.
         //solves didCarMoveForwardTest
         else {
-            con.position = con.position + oneMeter;
+            actuator.drive(con);
             counter++;
             //For actual implementation of a real parking-place.
             /*if (isEmpty() > 180);
@@ -96,8 +96,6 @@ public class AutoParkingCar {
             //Need to check so that the parkingSpot is empty and free to park.
             if (isEmpty())
                 parkingCounter++;
-
-
         }
 
         //returns the context
@@ -132,7 +130,7 @@ public class AutoParkingCar {
         } else {
             //we update the current position.
             //Solves didCarMoveBackwardsTest
-            con.position = con.position - oneMeter;
+            actuator.reverse(con);
             counter--;
         }
         return con;
