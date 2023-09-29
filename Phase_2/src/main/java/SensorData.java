@@ -1,12 +1,14 @@
 import java.util.Arrays;
 import java.util.Random;
 
-//Hardcoded the
+//Hardcoded the SensorData that we are mocking in the AutoParkingCarTest.
 public class SensorData {
+    //Flags for make sure that we cannot put a random value on the same "parking spot" again.
     private boolean flagZero = true;
     private boolean flagOne = true;
     private boolean flagTwo = true;
 
+    //Length is the total parking spot meter. (1 Parking spot = 5 meters).
     private final int length = 500;
 
     public int[] returnSensorData() {
@@ -19,12 +21,20 @@ public class SensorData {
 
         while (currentIndex < length) {
 
+            //Not used since we are mocking the sensorData.
             // Generate a random number (0, 240) to decide the group pattern
             //int groupPattern = random.nextInt(249);
+
+
             int parkOne = 4;
             int parkTwo = 14;
             int parkThree = 24;
 
+
+            /**
+             * The sensor data should be mocked such that it represent a street with three parking places of mutually
+             * different sizes, one should be not enough for safe parking and the other two enough for parking.
+             */
             if (flagZero && currentIndex < 250) {
                 // Fill the current group with "0,0,0,0,"
                 for (int i = parkOne; i < parkOne + 4; i++) {
@@ -62,6 +72,12 @@ public class SensorData {
             if (currentIndex >= 250) {
                 for (int i = currentIndex; i < array.length; i++) {
                     array[i] = 'P';
+                    //This should simulate the broken halfway of the sensors data.
+                    /**
+                     * Moreover, one of the sensors should be broken halfway in the middle of the scenario
+                     * (i.e., when the car has reached the middle of the street while moving forward) so that it
+                     * constantly produces recognizably out-of-bound values
+                     */
                 }
             }
 

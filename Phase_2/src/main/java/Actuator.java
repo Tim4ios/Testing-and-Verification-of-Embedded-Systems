@@ -1,26 +1,43 @@
+//Hardcoded the Actuator that we are mocking in the AutoParkingCarTest.
 public class Actuator {
+
     private int currentPosition;
     final private int oneMeter = 100;
     final private int endOfTheStreet = 50000;
     final private int startOfTheStreet = 0;
+    AutoParkingCar.context ActContext;
 
-    public Actuator() {
-        //Needs to have the same position as the car????
-        this.currentPosition = 0;
-        // Initialize the actuator with a starting position
+
+    //Creating a constructor for Actuator so that we can update the context and the position of the car.
+    public Actuator(AutoParkingCar.context ActContext) {
+        this.ActContext = ActContext;
+        this.currentPosition = ActContext.getPosition();
     }
 
-    public void drive(AutoParkingCar.context con) {
-        // Simulate moving forward
-        if (con.getPosition() > endOfTheStreet) {
-            con.setPosition(startOfTheStreet);
+
+    // Simulate moving forward
+    public void drive() {
+        //Checking pre-condition that car cannot move beyond street
+        if (currentPosition >= (endOfTheStreet - oneMeter)) {
+            AutoParkingCar.counter = startOfTheStreet;
+            currentPosition = startOfTheStreet;
+        } else {
+            //Move forward one meter
+            currentPosition += oneMeter;
+            AutoParkingCar.counter++;
         }
-        con.setPosition(currentPosition + oneMeter);
     }
 
-    public void reverse(AutoParkingCar.context con) {
-        // Simulate moving backward
-        con.setPosition(currentPosition - oneMeter);
+    // Simulate moving backward
+    public void reverse() {
+        //Checking pre-condition that car cannot move back beyond street
+        if (currentPosition <= startOfTheStreet)
+            currentPosition = startOfTheStreet;
+        else {
+            //Move backwards one meter
+            currentPosition -= oneMeter;
+            AutoParkingCar.counter--;
+        }
     }
 
 }

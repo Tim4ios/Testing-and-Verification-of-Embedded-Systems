@@ -1,18 +1,14 @@
 public class AutoParkingCar {
     public context con;
-
     private Actuator actuator;
     private int parkingCounter = 0;
     private boolean parkingSpot = false;
-
     private SensorData sensorData;
     static int counter = 0;
     private int[] parkingPlace;
-
     private final int oneMeter = 100;
     private final int endOfTheStreet = 50000;
     private final int startOfStreet = 0;
-
 
     public static class context {
         private int position;
@@ -47,10 +43,9 @@ public class AutoParkingCar {
         }
     }
 
-
     public AutoParkingCar(SensorData sd, context con, Actuator actuator) {
         this.con = con;
-        this.actuator = new Actuator();
+        this.actuator = actuator;
         this.sensorData = sd;
         con.position = 0;
         con.situation = false;
@@ -73,29 +68,25 @@ public class AutoParkingCar {
      * didTheCarMoveToEndOfStreetAndStartOverFromTheBeginningTest
      */
     public context MoveForward() {
+
+
         //This checks so if we are already parked, we cannot moveforward.
         //Solves tryToMoveForwardParkTest
         if (con.situation)
             return con;
         //This makes the car a U-turn and starts at Start of the street again.
         //Solves didTheCarMoveToEndOfStreetAndStartOverFromTheBeginningTest
-        if (con.position > endOfTheStreet) {
+        if (con.position >= (endOfTheStreet - oneMeter)) {
             counter = 0;
             con.position = startOfStreet;
         }
         //Else we update the current position.
         //solves didCarMoveForwardTest
         else {
-            actuator.drive(con);
+            actuator.drive();
+            con.position = con.position + oneMeter;
             counter++;
-            //For actual implementation of a real parking-place.
-            /*if (isEmpty() > 180);
-                parkingSpots[counter] = 0;
-            parkingSpots[counter] = 1;*/
 
-            //Need to check so that the parkingSpot is empty and free to park.
-            if (isEmpty())
-                parkingCounter++;
         }
 
         //returns the context
@@ -130,7 +121,8 @@ public class AutoParkingCar {
         } else {
             //we update the current position.
             //Solves didCarMoveBackwardsTest
-            actuator.reverse(con);
+            actuator.reverse();
+            con.position = con.position - oneMeter;
             counter--;
         }
         return con;
@@ -153,7 +145,7 @@ public class AutoParkingCar {
      * parkingSpotTooSmall
      * parkingDataOutOfBound
      */
-    public boolean isEmpty()  {
+    public boolean isEmpty() {
         int[] currentParkingLayout = sensorData.returnSensorData();
         //We want 5 meters minimum to ba able to park, this variable keeps track of how many there is in a row
         int numberOfOneMeterSpaces = 0;
@@ -194,36 +186,22 @@ public class AutoParkingCar {
      * parkCarWhenParkedTest
      */
     public context Park() {
-        int[] currentParkingLayout = sensorData.returnSensorData();
         //If we already are parked, do nothing
         //Solves parkCarWhenParkedTest
         if (con.situation)
             return con;
-        //Searching for the next avaible free parking spot.
-        while (currentParkingLayout[counter] != 0)
-            MoveForward();
 
-        System.out.println("Counter is " + counter);
-        System.out.println("CounterArr is " + currentParkingLayout[counter]);
-        //if (counter == 0)
-        //  break;
-        //This checks so that all the 5 meters parking spot are avaible. So no car has parked over two parkingspots.
-        //Also so that the parkingspot is no avabile anymore
-        if (isEmpty()) {
-            con.situation = true;
-            for (int i = 0; i < 5; i++) {
-                currentParkingLayout[counter++] = 3;
+        //Searching for the next available free parking spot.
+        while (true) {
+            //First checks if there is a parking spot next to the car if not, MoveForward
+            //Updates the situation of the car and returns the new context.
+            if (isEmpty()) {
+                con.situation = true;
+                System.out.println("You parked your car");
+                break;
             }
-            System.out.println("You parked your car");
+            MoveForward();
         }
-
-
-        //Solves parkCarTest
-        // Now when we parking the car we have to make it unavaible for the other cars that wants to park.
-
-        //We check so that parkingSpot is free and that the all 5 meters are free for parking
-        //Solves parkCarTest
-
 
         return con;
     }
@@ -239,30 +217,29 @@ public class AutoParkingCar {
      * Post-condition: The car should be parked thus returning an object indicating that it is
      * <p>
      * Test-cases:
-     * parkCarTest
-     * parkCarWhenParkedTest
+     * ifCarIsParkedTryToParkAndMoveBackwards
+     * tryToParkBackwardsWhenStartingInEndOfStreet
+     * tryToParkBackwardsWhenStartingInStartOfStreet
+     * ParkBackwardsIfNoAvailableParkingSpots
      */
     public context ParkBackwards() {
-        int[] currentParkingLayout = sensorData.returnSensorData();
         //If we already are parked, do nothing
         //Solves parkCarWhenParkedTest
         if (con.situation)
             return con;
 
-        // Moving the car backwards untill we finds a empty parking spot.
+        //First MoveBackwards untill finding a free parking spot then parks the car.
         while (true) {
             MoveBackwards();
+
+            //If we are moving backwards along the parkingspot without free parking spot.
             if (counter == 0)
                 break;
-            // Checking isEmpty because of when its true there is a parkingspot free then we stop move backwards
-            // and parks the car.
+
+            //Updates the situation of the car and returns the new context.
             if (isEmpty()) {
                 //Solves parkCarTest
-                // Now when we parking the car we have to make it unavaible for the other cars that wants to park.
                 con.situation = true;
-                for (int i = 0; i < 5; i++) {
-                    currentParkingLayout[counter--] = 3;
-                }
                 System.out.println("You parked your car");
                 break;
             }
@@ -281,9 +258,8 @@ public class AutoParkingCar {
      * Post-condition: The car should be unparked and moved forward also altering the situation of the car, returning an object with the situation
      * <p>
      * Test-cases:
-     * ifCarIsParkedTryToParkAndMoveBackwards
-     * tryToParkBackwardsWhenStartingInEndOfStreet
-     * tryToParkBackwardsWhenStartingInStartOfStreet
+     * unParkTest
+     * unParkCarWhenParkedTest
      */
     public context UnPark() {
         int[] currentParkingLayout = sensorData.returnSensorData();
@@ -295,14 +271,13 @@ public class AutoParkingCar {
         //If we unpark the car. we should set the parkingspot to avaible again
         //Solves unParkTest
         con.situation = false;
-        System.out.println("Counter is:" + counter);
         int tempCount = counter;
-        System.out.println("TC is:" + tempCount);
         for (int i = 0; i <= 5 && tempCount < currentParkingLayout.length; i++) {
             currentParkingLayout[tempCount] = 0;
             tempCount--;
 
         }
+        System.out.println("You unparked your car");
         return con;
 
     }

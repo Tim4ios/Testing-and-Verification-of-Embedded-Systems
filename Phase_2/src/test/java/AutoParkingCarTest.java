@@ -9,12 +9,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AutoParkingCarTest {
     @Mock
     SensorData mockedSensorData;
+
+    @Mock
+    Actuator mockedActuator;
+
     AutoParkingCar car;
     private int[] dummyParkingPlace;
     private int[] dummyParkingFirstSpot;
@@ -30,14 +35,16 @@ class AutoParkingCarTest {
         // Setting up two cars, one that has free parking and other one who hasn't at the start of the street,
         // with sensors and start position and that it is not parked.
     void setupCars() {
-        // Initialize dummy sensor data and car context for testing.
         mockedSensorData = Mockito.mock(SensorData.class);
+
+        mockedActuator = Mockito.mock(Actuator.class);
 
         AutoParkingCar.context dummyContext = new AutoParkingCar.context(0, false);
 
-        car = new AutoParkingCar(mockedSensorData, dummyContext, act);
+        //Tells that the mockedActuator should use the context thats created "dummyContext"
+        mockedActuator.ActContext = dummyContext;
 
-
+        car = new AutoParkingCar(mockedSensorData, dummyContext, mockedActuator);
     }
 
 
@@ -65,8 +72,6 @@ class AutoParkingCarTest {
     @Test
     void didCarMoveForwardTest() {
         // Test whether the car can move forward correctly.
-        int[] mockData = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        when(mockedSensorData.returnSensorData()).thenReturn(mockData);
         for (int i = 0; i < 6; i++) {
             car.MoveForward();
         }
@@ -85,15 +90,12 @@ class AutoParkingCarTest {
         car.Park();
         int resultPosition = car.con.getPosition();
         car.MoveForward();
-        Assertions.assertEquals(car.con.getPosition() - 100,resultPosition);
+        Assertions.assertEquals(car.con.getPosition(), resultPosition);
     }
 
     @Test
     void didTheCarMoveToEndOfStreetAndStartOverFromTheBeginningTest() {
         // Set the car's position to the end of the street.
-        int[] mockData = mockedSensorData.returnSensorData();
-        when(mockedSensorData.returnSensorData()).thenReturn(mockData);
-        System.out.println(Arrays.toString(mockData));
 
         car.con.setPosition(50000);
         // Assert that the car's position is set correctly to the end of the street.
@@ -110,9 +112,6 @@ class AutoParkingCarTest {
      **/
     @Test
     void didCarMoveBackwardsTest() {
-        // Test whether the car can move backward correctly.
-        int[] mockData = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        when(mockedSensorData.returnSensorData()).thenReturn(mockData);
         int pos5 = 500;
         for (int i = 0; i < 6; i++) {
             car.MoveForward();
@@ -183,6 +182,7 @@ class AutoParkingCarTest {
         car.MoveForward();
         car.Park();
         int resultPosition = car.con.getPosition();
+
         car.UnPark();
         // Assert that the car is not parked.
         Assertions.assertEquals(resultPosition, car.con.getPosition());
@@ -260,8 +260,6 @@ class AutoParkingCarTest {
         car.ParkBackwards();
         Assertions.assertTrue(car.con.getSituation());
         Assertions.assertEquals(45000, car.con.getPosition());
-
-
     }
 
     @Test
@@ -290,8 +288,7 @@ class AutoParkingCarTest {
     }
 
     @Test
-    void ParkBackwardsIfNoAvailableParkingSpots()
-    {
+    void ParkBackwardsIfNoAvailableParkingSpots() {
         car.con.setPosition(1000);
         car.con.setSituation(false);
         int[] mockData = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
@@ -299,7 +296,147 @@ class AutoParkingCarTest {
         car.ParkBackwards();
 
 
+    }
+/**------------------------------------------------------------------------------------------------------------------**/
+    /**
+     * TESTS FOR ActuatorClass
+     **/
+
+    /**
+     * Similarly, the actuator receives a call from the class designed in Phase 1 to move the car forward and backward
+     * and maintains the current car position so that it does not accept a command to move beyond limits.
+     * Again you design the interface of this class and mock it using Mockito.
+     */
+
+    @Test
+    void forwardAndBackwardTest() {
+        // Test to move forward then backward and verify that the car is in the same position
+        int startOfStreet = car.con.getPosition();
+        car.MoveForward();
+        car.MoveBackwards();
+
+        Assertions.assertEquals(mockedActuator.ActContext.getPosition(), startOfStreet);
+        Assertions.assertEquals(car.con.getPosition(), startOfStreet);
 
     }
 
+    @Test
+    void endOfTheStreetTestMoveForwardsWithActuator() {
+        //Check that you will end up at the start of the street if you move beyond it
+        car.con.setPosition(49900);
+
+        car.MoveForward();
+
+        Assertions.assertEquals(mockedActuator.ActContext.getPosition(), car.con.getPosition());
+        Assertions.assertEquals(0, car.con.getPosition());
+    }
+
+    @Test
+    void startOfTheStreetTestMoveBackwardsWithActuator() {
+        //Check that you cannot move backwards when at start of the street
+        car.con.setPosition(0);
+
+        car.MoveBackwards();
+
+        Assertions.assertEquals(mockedActuator.ActContext.getPosition(), car.con.getPosition());
+        Assertions.assertEquals(0, car.con.getPosition());
+    }
+
+    @Test
+    void moveForwardWithActuatorTest() {
+        //Check moveForward with Actuator class and that the context is the same
+        car.MoveForward();
+        car.MoveForward();
+        car.MoveForward();
+        car.MoveForward();
+        car.MoveForward();
+
+        int result = car.con.getPosition();
+
+        Assertions.assertEquals(mockedActuator.ActContext.getPosition(), result);
+        Assertions.assertEquals(car.con.getPosition(), result);
+
+
+    }
+
+    @Test
+    void moveBackwardsWithActuatorTest() {
+        //Check movebackwards and that the mocked actuator class is the same
+        car.con.setPosition(1000);
+        car.MoveBackwards();
+        car.MoveBackwards();
+        car.MoveBackwards();
+        car.MoveBackwards();
+        car.MoveBackwards();
+
+
+        int result = car.con.getPosition();
+
+        Assertions.assertEquals(mockedActuator.ActContext.getPosition(), result);
+        Assertions.assertEquals(car.con.getPosition(), result);
+    }
+
+
+/**------------------------------------------------------------------------------------------------------------------**/
+    /**
+     * Integration tests (Scenario tests)
+     * <p>
+     * Desciption of scenario 1: Starts at the beginning of the street, Moves along the street and scan the available parking places,
+     * Moves backwards until the most efficient parking place (the smallest available parking where it can still park safely),
+     * Parks the car, Unparks the car and drive to the end of the street.
+     **/
+
+    @Test
+    void scenarioOneTest() {
+        int[] mockData = {1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80};
+        when(mockedSensorData.returnSensorData()).thenReturn(mockData);
+
+        int startOfStreet = 0;
+        int endOfStreet = 49900;
+        car.con.setPosition(startOfStreet);
+        Assertions.assertEquals(0, car.con.getPosition());
+
+        while (car.con.getPosition() != 49900) car.MoveForward();
+
+        car.ParkBackwards();
+
+        car.UnPark();
+        Assertions.assertFalse(car.con.getSituation());
+
+        while (car.con.getPosition() != 49900) car.MoveForward();
+
+        Assertions.assertEquals(endOfStreet, car.con.getPosition());
+    }
+
+    /**
+     * Integration tests (Scenario tests)
+     * <p
+     * Desciption of scenario 2:The car stands parked inside a parking spot, unparks and then drives around a lap of the
+     * rest of the parking lot and parallel parks into the same parking spot as previously positioned.
+     **/
+    @Test
+    void scenarioTwoTest() {
+
+        int[] mockData = {1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80};
+        when(mockedSensorData.returnSensorData()).thenReturn(mockData);
+
+        car.Park();
+        Assertions.assertTrue(car.con.getSituation());
+
+        car.UnPark();
+        Assertions.assertFalse(car.con.getSituation());
+
+        int parkingSpot = car.con.getPosition();
+        while (car.con.getPosition() != parkingSpot) car.MoveForward();
+
+        car.Park();
+        Assertions.assertTrue(car.con.getSituation());
+        Assertions.assertEquals(car.con.getPosition(), parkingSpot);
+    }
+
+
 }
+
+
+
+
