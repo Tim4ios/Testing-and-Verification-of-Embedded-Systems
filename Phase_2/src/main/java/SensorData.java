@@ -11,6 +11,33 @@ public class SensorData {
     //Length is the total parking spot meter. (1 Parking spot = 5 meters).
     private final int length = 500;
 
+    /**
+     * Description:
+     * returnSensorData: Generates a simulated array of sensor data representing a street with parking spots.
+     * It includes flags to ensure that the same parking spot is not randomly marked again and simulates a broken sensor
+     * that produces out-of-bound values when the car reaches the middle of the street.
+     * <p>
+     * Pre-condition: "flagZero", "flagOne", and "flagTwo" boolean flags should be initially set to true,
+     * indicating that no parking spot has been marked yet.
+     * The `length` variable should be set to the total length of the street in meters (e.g., 500 meters),
+     * and it should be greater than 0.
+     * <p>
+     * Post-condition:
+     * The method returns an integer array of sensor data, where each element in the array represents the state of a
+     * specific meter on the street.
+     * The array contains "0" to represent available parking spots and "P" to represent broken sensors that produce
+     * out-of-bound values.
+     * The flags "flagZero", "flagOne", and "flagTwo" are updated to false once parking spots are marked to ensure
+     * they are not marked again.
+     * The generated sensor data array represents a street with three parking spots of mutually different sizes, with one
+     * parking spot being insufficient for safe parking and the other two being adequate for parking.
+     * The sensor data is broken halfway through the scenario, specifically when the car reaches the middle of the street,
+     * by marking the remaining elements of the array with 'P' to simulate a broken sensor.
+     * <p>
+     * Test-cases:
+     *
+     *
+     */
     public int[] returnSensorData() {
         int[] array = new int[length];
         //Random random = new Random();
